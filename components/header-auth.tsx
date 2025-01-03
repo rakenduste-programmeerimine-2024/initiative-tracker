@@ -51,7 +51,7 @@ export default function HeaderAuth() {
           <Link href="/sign-in" className="text-sm text-gray-300 hover:underline">
             Sign In
           </Link>
-          <Link href="/sign-up" className="text-sm text-red-500 hover:underline">
+          <Link href="/sign-up" className="px-4 py-2 bg-red-600 rounded text-white hover:bg-red-700">
             Get Started
           </Link>
         </>
