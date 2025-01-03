@@ -33,6 +33,9 @@ export default function RootLayout({
                     D&D Initiative Tracker
                   </Link>
                   <div className="flex items-center gap-4">
+                    <Link href="/tracker" className="text-sm text-red-500 hover:underline">
+                      Tracker
+                    </Link>
                     <HeaderAuth />
                     <ThemeSwitcher />
                   </div>
