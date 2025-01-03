@@ -1,10 +1,9 @@
-import { EnvVarWarning } from "@/components/env-var-warning";
-import HeaderAuth from "@/components/header-auth";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
 import Link from "next/link";
 import "./globals.css";
+import HeaderAuth from "@/components/header-auth";
 
 export const metadata = {
   title: "D&D Initiative Tracker",

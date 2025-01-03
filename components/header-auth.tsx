@@ -1,32 +1,62 @@
-import { signOutAction } from "@/app/actions";
+"use client";
+
+import { useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import { createClient } from "@/utils/supabase/server";
+import { type User } from "@supabase/supabase-js";
 
-export default async function AuthButton() {
-  const supabase = await createClient();
+export default function HeaderAuth() {
+  const supabase = createClient();
+  const [user, setUser] = useState<User | null>(null);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  useEffect(() => {
+    async function fetchUser() {
+      const { data, error } = await supabase.auth.getUser();
+      if (!error && data.user) {
+        setUser(data.user); // Set the user if authenticated
+      }
+    }
 
-  return user ? (
+    fetchUser();
+  }, [supabase]);
+
+  return (
     <div className="flex items-center gap-4">
-      Hey, {user.email}!
-      <form action={signOutAction}>
-        <Button type="submit" variant={"outline"}>
-          Sign out
-        </Button>
-      </form>
-    </div>
-  ) : (
-    <div className="flex gap-2">
-      <Button asChild size="sm" variant={"outline"}>
-        <Link href="/sign-in">Sign in</Link>
-      </Button>
-      <Button asChild size="sm" variant={"default"}>
-        <Link href="/sign-up">Sign up</Link>
-      </Button>
+      {user ? (
+        <>
+          {/* Profile Circle */}
+          <Link href="/profile">
+            <div
+              className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-400"
+              title="Go to Profile"
+            >
+              <span className="text-sm text-white font-bold">
+                {user.email.charAt(0).toUpperCase()} {/* First letter of email */}
+              </span>
+            </div>
+          </Link>
+          {/* Sign Out Button */}
+          <button
+            onClick={async () => {
+              await supabase.auth.signOut();
+              window.location.reload(); // Refresh to reset state
+            }}
+            className="px-4 py-2 bg-red-600 rounded text-white hover:bg-red-700"
+          >
+            Sign Out
+          </button>
+        </>
+      ) : (
+        <>
+          {/* Sign In/Sign Up Links */}
+          <Link href="/sign-in" className="text-sm text-gray-300 hover:underline">
+            Sign In
+          </Link>
+          <Link href="/sign-up" className="text-sm text-red-500 hover:underline">
+            Get Started
+          </Link>
+        </>
+      )}
     </div>
   );
 }
