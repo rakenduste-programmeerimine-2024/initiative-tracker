@@ -138,7 +138,7 @@ export default function ProfileDetails({ user }: { user: User | null }) {
           />
         </div>
 
-        <div className="flex justify-between items-center mt-6">
+        <div className="flex justify-center">
           <button
             onClick={() => updateProfile({ fullname, username, avatarUrl })}
             disabled={loading}
@@ -149,13 +149,6 @@ export default function ProfileDetails({ user }: { user: User | null }) {
             }`}
           >
             {loading ? "Loading..." : "Update Profile"}
-          </button>
-
-          <button
-            onClick={handleLogout}
-            className="px-6 py-2 rounded-md shadow-md text-white bg-[#6a040f] hover:bg-[#9d0208]"
-          >
-            Log Out
           </button>
         </div>
       </div>
