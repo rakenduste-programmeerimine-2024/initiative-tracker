@@ -5,6 +5,10 @@ import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
 import { type User } from "@supabase/supabase-js";
 
+          {/*Tracker page*/}
+          <Link href= "/tracker" className="text-sm text-red-500 hover:underline"> 
+            Tracker
+          </Link>
 export default function HeaderAuth() {
   const supabase = createClient();
   const [user, setUser] = useState<User | null>(null);
@@ -13,7 +17,7 @@ export default function HeaderAuth() {
     async function fetchUser() {
       const { data, error } = await supabase.auth.getUser();
       if (!error && data.user) {
-        setUser(data.user); // Set the user if authenticated
+        setUser(data.user);
       }
     }
 
@@ -24,22 +28,21 @@ export default function HeaderAuth() {
     <div className="flex items-center gap-4">
       {user ? (
         <>
-          {/* Profile Circle */}
           <Link href="/profile">
             <div
               className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer hover:bg-gray-400"
               title="Go to Profile"
             >
               <span className="text-sm text-white font-bold">
-                {user.email.charAt(0).toUpperCase()} {/* First letter of email */}
+                {user.email?.charAt(0).toUpperCase() || "?"}
               </span>
             </div>
           </Link>
-          {/* Sign Out Button */}
+          {/* Sign out */}
           <button
             onClick={async () => {
               await supabase.auth.signOut();
-              window.location.reload(); // Refresh to reset state
+              window.location.reload();
             }}
             className="px-4 py-2 bg-red-600 rounded text-white hover:bg-red-700"
           >
@@ -48,11 +51,11 @@ export default function HeaderAuth() {
         </>
       ) : (
         <>
-          {/* Sign In/Sign Up Links */}
+          {/* Sign in and sign out */}
           <Link href="/sign-in" className="text-sm text-gray-300 hover:underline">
             Sign In
           </Link>
-          <Link href="/sign-up" className="text-sm text-red-500 hover:underline">
+          <Link href="/sign-up" className="px-4 py-2 bg-red-600 rounded text-white hover:bg-red-700">
             Get Started
           </Link>
         </>
