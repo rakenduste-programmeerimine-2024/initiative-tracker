@@ -41,6 +41,14 @@ export default function Tracker() {
     setActiveIndex((prev) => (prev + 1) % participants.length);
   };
 
+  // Define background color based on HP
+  const getHpColor = (hp: string) => {
+    const value = Number(hp);
+    if (value > 80) return "bg-[#4caf50]"; // Roheline
+    if (value >= 40) return "bg-[#ffeb3b]"; // Kollane
+    return "bg-[#f44336]"; // Punane
+  };
+
   return (
     <div className="p-6 bg-[#1c1c1e] rounded-md shadow-md">
       {/* Table */}
@@ -101,7 +109,9 @@ export default function Tracker() {
                         )
                       )
                     }
-                    className="bg-[#2c2c2e] text-[#f4f4f5] rounded p-1 w-full"
+                    className={`text-[#1c1c1e] rounded p-1 w-full ${getHpColor(
+                      participant.hp
+                    )}`}
                   />
                 </td>
                 <td className="p-2 border-b border-[#2c2c2e]">
