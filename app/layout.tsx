@@ -2,6 +2,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
 import Link from "next/link";
+import Image from "next/image";
 import "./globals.css";
 import HeaderAuth from "@/components/header-auth";
 
@@ -29,8 +30,15 @@ export default function RootLayout({
               {/* Navigation */}
               <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
                 <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-                  <Link href={"/"} className="font-semibold text-lg">
-                    D&D Initiative Tracker
+                  {/* Logo */}
+                  <Link href={"/"}>
+                    <Image
+                      src="/logo.png" 
+                      alt="Website Logo"
+                      width={203}
+                      height={61}
+                      priority
+                    />
                   </Link>
                   <div className="flex items-center gap-4">
                     <Link href="/tracker" className="text-sm text-red-500 hover:underline">
@@ -49,7 +57,6 @@ export default function RootLayout({
 
               {/* Footer */}
               <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-4">
-
                 <ThemeSwitcher />
               </footer>
             </div>
