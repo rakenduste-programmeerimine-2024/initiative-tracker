@@ -7,6 +7,7 @@ export default function Tracker() {
     { initiative: "", name: "", hp: "", ac: "" },
   ]);
   const [round, setRound] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const addParticipant = () => {
     setParticipants([...participants, { initiative: "", name: "", hp: "", ac: "" }]);
@@ -14,20 +15,30 @@ export default function Tracker() {
 
   const removeParticipant = (index: number) => {
     setParticipants(participants.filter((_, i) => i !== index));
+    if (activeIndex >= participants.length - 1 && activeIndex > 0) {
+      setActiveIndex(activeIndex - 1);
+    }
   };
 
   const clearParticipants = () => {
     setParticipants([]);
+    setActiveIndex(0);
   };
 
   const nextRound = () => {
     setRound((prev) => prev + 1);
+    advanceTurn();
   };
 
   const sortParticipants = () => {
     setParticipants((prev) =>
       [...prev].sort((a, b) => (Number(b.initiative) || 0) - (Number(a.initiative) || 0))
     );
+    setActiveIndex(0); 
+  };
+
+  const advanceTurn = () => {
+    setActiveIndex((prev) => (prev + 1) % participants.length);
   };
 
   return (
@@ -45,7 +56,12 @@ export default function Tracker() {
           </thead>
           <tbody>
             {participants.map((participant, index) => (
-              <tr key={index} className="text-center">
+              <tr
+                key={index}
+                className={`text-center ${
+                  index === activeIndex ? "bg-[#3c3c3e] text-[#f77f85]" : ""
+                }`}
+              >
                 <td className="p-2 border-b border-[#2c2c2e]">
                   <input
                     type="number"
@@ -120,10 +136,16 @@ export default function Tracker() {
       <div className="flex justify-between items-center mt-4">
         <div className="space-x-2">
           <button
+            onClick={advanceTurn}
+            className="px-4 py-2 bg-[#6a040f] text-white rounded hover:bg-[#9d0208]"
+          >
+            Next Turn
+          </button>
+          <button
             onClick={nextRound}
             className="px-4 py-2 bg-[#6a040f] text-white rounded hover:bg-[#9d0208]"
           >
-            Next
+            Next Round
           </button>
           <button
             onClick={sortParticipants}
