@@ -1,22 +1,10 @@
+import {
+  ParticipantStatus,
+  ParticipantType,
+} from "@/app/types/enums/ParticipantEnums"
 import { createEntity, Entity } from "./Entity"
 
 type UUID = string
-
-export enum ParticipantType {
-  Undefined = "Undefined",
-  PlayerCharacter = "PlayerCharacter",
-  NonPlayerCharacter = "NonPlayerCharacter",
-  Creature = "Creature",
-  Minion = "Minion",
-  Boss = "Boss",
-  Companion = "Companion",
-}
-
-export enum ParticipantStatus {
-  Alive = "Alive",
-  Unconscious = "Unconscious",
-  Dead = "Dead",
-}
 
 export type Participant = Entity & {
   encounter_id: UUID | null
