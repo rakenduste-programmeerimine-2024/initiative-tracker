@@ -53,6 +53,7 @@ function validateCombatLog(data: Partial<CombatLog>) {
 }
 
 export function createCombatLog(data: Partial<CombatLog>): CombatLog {
+  validateCombatLog(data)
   const baseEntity = createEntity(data)
 
   return {
