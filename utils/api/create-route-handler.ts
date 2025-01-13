@@ -14,13 +14,16 @@ export function createRouteHandler(
     let id: string | null = null
 
     if (requiresId) {
-      if (!context.params?.id) {
+      const params = await context.params // Await the asynchronous params
+
+      if (!params?.id) {
         return NextResponse.json(
           { error: "Missing required parameter: id" },
           { status: 400 },
         )
       }
-      id = context.params.id
+
+      id = params.id
     }
 
     const userIdOrError = await validateRequest(req, id || "")
