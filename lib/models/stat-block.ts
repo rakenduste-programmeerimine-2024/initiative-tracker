@@ -1,5 +1,5 @@
 import { DEFAULT_STAT_BLOCK } from "@/lib/constants/default-values"
-import { HIT_POINTS_FORMULA_REGEX } from "@/utils/validation-patterns"
+import { HIT_POINTS_FORMULA_REGEX } from "@/utils/entities/validation-patterns"
 import { Entity, EntityUtils } from "./entity"
 
 export type StatBlock = Entity & {

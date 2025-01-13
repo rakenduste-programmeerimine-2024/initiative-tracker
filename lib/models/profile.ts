@@ -1,6 +1,6 @@
 import { DEFAULT_PROFILE } from "@/lib/constants/default-values"
 import { ERROR_MESSAGES } from "@/lib/constants/error-messages"
-import { URL_PATTERN } from "@/utils/validation-patterns"
+import { URL_PATTERN } from "@/utils/entities/validation-patterns"
 
 type UUID = string
 
