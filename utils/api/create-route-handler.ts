@@ -1,11 +1,7 @@
 import { validateRequest } from "@/utils/api/validate-request"
 import { NextResponse } from "next/server"
 
-type HandlerFunction = (
-  id: string | null,
-  userId: string,
-  req?: Request,
-) => Promise<any>
+type HandlerFunction = (id: string | null, req: Request) => Promise<any>
 
 export function createRouteHandler(
   handler: HandlerFunction,
@@ -33,7 +29,7 @@ export function createRouteHandler(
     }
 
     try {
-      const result = await handler(id, userIdOrError, req)
+      const result = await handler(id, req)
       return NextResponse.json(result)
     } catch (error) {
       return NextResponse.json(
