@@ -28,7 +28,7 @@ export const DEFAULT_PARTICIPANT = {
   stat_block_id: null,
   type: ParticipantType.Undefined,
   name: "Unnamed Participant",
-  initiative: 10,
+  rolled_initiative: 10,
   hit_points_max: 999, // TODO: Revise this, possibly needs to be nullable
   group_no: 0,
   status: ParticipantStatus.Alive,
@@ -39,7 +39,8 @@ export const DEFAULT_STAT_BLOCK = {
   dexterity_score: 10,
   hit_points_average: null,
   hit_points_formula: null,
-  armor_class: 10,
+  base_armor_class: 10,
+  dex_applies_to_ac: true,
   speed: 30,
 }
 

@@ -7,7 +7,8 @@ export type StatBlock = Entity & {
   dexterity_score: number
   hit_points_average: number | null
   hit_points_formula: string | null
-  armor_class: number
+  base_armor_class: number
+  dex_applies_to_ac: boolean | true
   speed: number
 }
 
@@ -45,11 +46,11 @@ export const StatBlockUtils = {
     }
 
     if (
-      data.armor_class !== undefined &&
-      (data.armor_class < 0 || data.armor_class > 30)
+      data.base_armor_class !== undefined &&
+      (data.base_armor_class < 0 || data.base_armor_class > 30)
     ) {
       throw new Error(
-        `Invalid armor class (${data.armor_class}). Must be between 0 and 30.`,
+        `Invalid armor class (${data.base_armor_class}). Must be between 0 and 30.`,
       )
     }
 
