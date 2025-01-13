@@ -4,6 +4,7 @@ import { Profile } from "@/lib/models/profile"
 
 export async function getProfile(id: string) {
   const supabase = await getSupabaseClient()
+
   const { data, error } = await supabase
     .from(TableName.Profiles)
     .select("*")
@@ -19,7 +20,16 @@ export async function getProfile(id: string) {
 
 export async function updateProfile(id: string, updates: Partial<Profile>) {
   const supabase = await getSupabaseClient()
-  const { error } = await supabase.from("profiles").update(updates).eq("id", id)
+
+  const { error } = await supabase
+    .from(TableName.Profiles)
+    .update({
+      ...updates,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", id)
+    .select("*")
+    .single()
 
   if (error) {
     throw new Error(`Error updating profile: ${error.message}`)
