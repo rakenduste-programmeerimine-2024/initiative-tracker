@@ -18,23 +18,23 @@ export async function validateUserToken(
 }
 
 /**
- * Validates if the request's user ID matches the expected user ID.
+ * Validates that the request contains a valid user token.
  * @param req - The incoming request.
  * @param expectedUserId - The expected user ID.
- * @returns True if valid, or an error response if invalid.
+ * @returns The user ID if valid, or an error response if invalid.
  */
 export async function validateRequest(
-  req: Request | NextRequest,
+  req: Request,
   expectedUserId: string,
-): Promise<true | NextResponse> {
-  const userIdOrError = await validateUserToken(req)
-  if (userIdOrError instanceof NextResponse) {
-    return userIdOrError // Return error response
+): Promise<string | NextResponse> {
+  const userId = await getUserIdFromRequest(req as any);
+  if (!userId) {
+    return createErrorResponse("Unauthorized", 401);
   }
 
-  if (userIdOrError !== expectedUserId) {
-    return createErrorResponse("Forbidden", 403)
+  if (userId !== expectedUserId) {
+    return createErrorResponse("Forbidden", 403);
   }
 
-  return true
+  return userId;
 }
