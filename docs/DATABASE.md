@@ -23,3 +23,5 @@ This document outlines the database structure used in the Advanced Initiative Tr
 ### `profiles`
 - **Purpose**: Stores user information.
 - **Key Columns**: `id`, `full_name`, `username`, `avatar_url`.
+
+For the full database schema, see [schema.sql](./schema.sql).
