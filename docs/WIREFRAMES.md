@@ -14,6 +14,8 @@
   - Brief description of the app
   - Navigation options to other sections
 
+![Front Page](./FrontPage.jpg "Front Page")
+
 ## Participant Management Form
 - **Purpose:** Add and edit participants for initiative tracking.
 - **Components:**
@@ -28,9 +30,13 @@
   - "Next Turn" button
   - Editable HP fields with color-coded statuses (green, yellow, red)
 
+![Tracker Page](./TrackerPage.jpg "Tracker Page")
+
 ## Profile Management Page
 - **Purpose:** Manage user profile settings.
 - **Components:**
   - Input fields for username and password
   - Save button
   - Optional profile picture upload
+
+![Profile Page](./ProfilePage.jpg "Profile Page")
