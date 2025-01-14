@@ -44,6 +44,9 @@ export default function RootLayout({
                     <Link href="/tracker" className="text-sm text-red-500 hover:underline">
                       Tracker
                     </Link>
+                    <Link href="/participants" className="text-sm text-red-500 hover:underline">
+                      Participants
+                    </Link>
                     <HeaderAuth />
                     <ThemeSwitcher />
                   </div>
