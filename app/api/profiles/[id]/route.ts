@@ -1,33 +1,14 @@
+import { createRouteHandler } from "@/utils/api/create-route-handler"
+import { getCurrentUserId } from "@/utils/api/user-utils"
 import { getProfile, updateProfile } from "@/lib/services/profile-service"
-import { NextResponse } from "next/server"
 
-export async function GET(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
-  try {
-    const profile = await getProfile(params.id)
-    return NextResponse.json(profile)
-  } catch (error) {
-    return NextResponse.json(
-      { error: (error as Error).message },
-      { status: 400 },
-    )
-  }
-}
+export const GET = createRouteHandler(async (id, req) => {
+  const profile = await getProfile(id!) // `id` will be present since `requiresId` is true by default
+  return profile
+})
 
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
-  try {
-    const updates = await req.json()
-    await updateProfile(params.id, updates)
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    return NextResponse.json(
-      { error: (error as Error).message },
-      { status: 400 },
-    )
-  }
-}
+export const PUT = createRouteHandler(async (id, req) => {
+  const updates = await req!.json()
+  await updateProfile(id!, updates)
+  return { success: true }
+})
