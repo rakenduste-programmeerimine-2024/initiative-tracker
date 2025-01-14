@@ -1,53 +1,58 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState } from "react"
 
 export default function Tracker() {
   const [participants, setParticipants] = useState([
     { initiative: "", name: "", hp: "", ac: "" },
-  ]);
-  const [round, setRound] = useState(1);
-  const [activeIndex, setActiveIndex] = useState(0);
+  ])
+  const [round, setRound] = useState(1)
+  const [activeIndex, setActiveIndex] = useState(0)
 
   const addParticipant = () => {
-    setParticipants([...participants, { initiative: "", name: "", hp: "", ac: "" }]);
-  };
+    setParticipants([
+      ...participants,
+      { initiative: "", name: "", hp: "", ac: "" },
+    ])
+  }
 
   const removeParticipant = (index: number) => {
-    setParticipants(participants.filter((_, i) => i !== index));
+    setParticipants(participants.filter((_, i) => i !== index))
     if (activeIndex >= participants.length - 1 && activeIndex > 0) {
-      setActiveIndex(activeIndex - 1);
+      setActiveIndex(activeIndex - 1)
     }
-  };
+  }
 
   const clearParticipants = () => {
-    setParticipants([]);
-    setActiveIndex(0);
-  };
+    setParticipants([])
+    setActiveIndex(0)
+  }
 
   const nextRound = () => {
-    setRound((prev) => prev + 1);
-    advanceTurn();
-  };
+    setRound(prev => prev + 1)
+    advanceTurn()
+  }
 
   const sortParticipants = () => {
-    setParticipants((prev) =>
-      [...prev].sort((a, b) => (Number(b.initiative) || 0) - (Number(a.initiative) || 0))
-    );
-    setActiveIndex(0); 
-  };
+    setParticipants(prev =>
+      [...prev].sort(
+        (a, b) => (Number(b.initiative) || 0) - (Number(a.initiative) || 0),
+      ),
+    )
+    setActiveIndex(0)
+  }
 
   const advanceTurn = () => {
-    setActiveIndex((prev) => (prev + 1) % participants.length);
-  };
+    setActiveIndex(prev => (prev + 1) % participants.length)
+  }
 
   // Define background color based on HP
   const getHpColor = (hp: string) => {
-    const value = Number(hp);
-    if (value > 80) return "bg-[#4caf50]"; // Roheline
-    if (value >= 40) return "bg-[#ffeb3b]"; // Kollane
-    return "bg-[#f44336]"; // Punane
-  };
+    const value = Number(hp)
+    if (value > 80) return "bg-[#4caf50]" // Roheline
+    if (value >= 40) return "bg-[#ffeb3b]" // Kollane
+    return "bg-[#f44336]" // Punane
+  }
 
   return (
     <div className="p-6 bg-[#1c1c1e] rounded-md shadow-md">
@@ -74,11 +79,13 @@ export default function Tracker() {
                   <input
                     type="number"
                     value={participant.initiative}
-                    onChange={(e) =>
-                      setParticipants((prev) =>
+                    onChange={e =>
+                      setParticipants(prev =>
                         prev.map((p, i) =>
-                          i === index ? { ...p, initiative: e.target.value } : p
-                        )
+                          i === index
+                            ? { ...p, initiative: e.target.value }
+                            : p,
+                        ),
                       )
                     }
                     className="bg-[#2c2c2e] text-[#f4f4f5] rounded p-1 w-full"
@@ -88,11 +95,11 @@ export default function Tracker() {
                   <input
                     type="text"
                     value={participant.name}
-                    onChange={(e) =>
-                      setParticipants((prev) =>
+                    onChange={e =>
+                      setParticipants(prev =>
                         prev.map((p, i) =>
-                          i === index ? { ...p, name: e.target.value } : p
-                        )
+                          i === index ? { ...p, name: e.target.value } : p,
+                        ),
                       )
                     }
                     className="bg-[#2c2c2e] text-[#f4f4f5] rounded p-1 w-full"
@@ -102,15 +109,15 @@ export default function Tracker() {
                   <input
                     type="number"
                     value={participant.hp}
-                    onChange={(e) =>
-                      setParticipants((prev) =>
+                    onChange={e =>
+                      setParticipants(prev =>
                         prev.map((p, i) =>
-                          i === index ? { ...p, hp: e.target.value } : p
-                        )
+                          i === index ? { ...p, hp: e.target.value } : p,
+                        ),
                       )
                     }
                     className={`text-[#1c1c1e] rounded p-1 w-full ${getHpColor(
-                      participant.hp
+                      participant.hp,
                     )}`}
                   />
                 </td>
@@ -118,11 +125,11 @@ export default function Tracker() {
                   <input
                     type="number"
                     value={participant.ac}
-                    onChange={(e) =>
-                      setParticipants((prev) =>
+                    onChange={e =>
+                      setParticipants(prev =>
                         prev.map((p, i) =>
-                          i === index ? { ...p, ac: e.target.value } : p
-                        )
+                          i === index ? { ...p, ac: e.target.value } : p,
+                        ),
                       )
                     }
                     className="bg-[#2c2c2e] text-[#f4f4f5] rounded p-1 w-full"
@@ -181,5 +188,5 @@ export default function Tracker() {
         </div>
       </div>
     </div>
-  );
+  )
 }
