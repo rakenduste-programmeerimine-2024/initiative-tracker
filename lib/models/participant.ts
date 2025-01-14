@@ -12,7 +12,7 @@ export type Participant = Entity & {
   stat_block_id: UUID | null
   type: ParticipantType
   name: string | null
-  initiative: number
+  rolled_initiative: number
   hit_points_max: number
   group_no: number | null
   status: ParticipantStatus
@@ -23,11 +23,11 @@ export const ParticipantUtils = {
     EntityUtils.validate(data)
 
     if (
-      data.initiative !== undefined &&
-      (data.initiative < -4 || data.initiative > 30)
+      data.rolled_initiative !== undefined &&
+      (data.rolled_initiative < -4 || data.rolled_initiative > 30)
     ) {
       throw new Error(
-        `Invalid initiative value (${data.initiative}). Must be between -4 and 30.`,
+        `Invalid initiative value (${data.rolled_initiative}). Must be between -4 and 30.`,
       )
     }
 
