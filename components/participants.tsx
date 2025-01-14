@@ -4,11 +4,13 @@ import { useState } from "react";
 
 export default function Participants() {
   const [participants, setParticipants] = useState([
-    { name: "" },
+    { name: "", dexterity: 10, dexModifier: 0 },
   ]);
 
+  const calculateDexModifier = (dexterity: number) => Math.floor((dexterity - 10) / 2);
+
   const addParticipant = () => {
-    setParticipants([...participants, { name: "" }]);
+    setParticipants([...participants, { name: "", dexterity: 10, dexModifier: 0 }]);
   };
 
   const removeParticipant = (index: number) => {
@@ -32,6 +34,21 @@ export default function Participants() {
                 )
               }
             />
+            <input
+              type="number"
+              value={participant.dexterity}
+              onChange={(e) => {
+                const dexterity = Number(e.target.value);
+                setParticipants((prev) =>
+                  prev.map((p, i) =>
+                    i === index
+                      ? { ...p, dexterity, dexModifier: calculateDexModifier(dexterity) }
+                      : p
+                  )
+                );
+              }}
+            />
+            <span>DEX Mod: {participant.dexModifier}</span>
             <button onClick={() => removeParticipant(index)}>Remove</button>
           </li>
         ))}
