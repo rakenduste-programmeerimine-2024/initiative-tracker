@@ -1,29 +1,23 @@
 import { validateRequest } from "@/utils/api/validate-request"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
-type HandlerFunction = (id: string | null, req: Request) => Promise<any>
+type HandlerFunction = (id: string | null, req: NextRequest) => Promise<any>
 
 export function createRouteHandler(
   handler: HandlerFunction,
   requiresId: boolean = true,
 ): (
-  req: Request,
-  context: { params?: { id: string } },
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
 ) => Promise<NextResponse> {
-  return async (req, context) => {
-    let id: string | null = null
+  return async (req, { params }) => {
+    const id = (await params)?.id
 
-    if (requiresId) {
-      const params = await context.params // Await the asynchronous params
-
-      if (!params?.id) {
-        return NextResponse.json(
-          { error: "Missing required parameter: id" },
-          { status: 400 },
-        )
-      }
-
-      id = params.id
+    if (requiresId && !id) {
+      return NextResponse.json(
+        { error: "Missing required parameter: id" },
+        { status: 400 },
+      )
     }
 
     const userIdOrError = await validateRequest(req, id || "")
