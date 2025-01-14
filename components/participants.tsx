@@ -4,13 +4,13 @@ import { useState } from "react";
 
 export default function Participants() {
   const [participants, setParticipants] = useState([
-    { name: "", dexterity: 10, dexModifier: 0, hp: 0 },
+    { name: "", dexterity: 10, dexModifier: 0, hp: 0, ac: 10 },
   ]);
 
   const calculateDexModifier = (dexterity: number) => Math.floor((dexterity - 10) / 2);
 
   const addParticipant = () => {
-    setParticipants([...participants, { name: "", dexterity: 10, dexModifier: 0, hp: 0 }]);
+    setParticipants([...participants, { name: "", dexterity: 10, dexModifier: 0, hp: 0, ac: 10 }]);
   };
 
   const removeParticipant = (index: number) => {
@@ -39,10 +39,11 @@ export default function Participants() {
               value={participant.dexterity}
               onChange={(e) => {
                 const dexterity = Number(e.target.value);
+                const dexModifier = calculateDexModifier(dexterity);
                 setParticipants((prev) =>
                   prev.map((p, i) =>
                     i === index
-                      ? { ...p, dexterity, dexModifier: calculateDexModifier(dexterity) }
+                      ? { ...p, dexterity, dexModifier, ac: 10 + dexModifier }
                       : p
                   )
                 );
@@ -61,6 +62,7 @@ export default function Participants() {
                 );
               }}
             />
+            <span>AC: {participant.ac}</span>
             <button onClick={() => removeParticipant(index)}>Remove</button>
           </li>
         ))}
