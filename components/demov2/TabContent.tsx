@@ -1,22 +1,15 @@
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TabData } from ".";
 import DiceRoller from "./DiceRoller";
 import dynamic from "next/dynamic";
+import ImageUploader from "./Image";
 
 const StatRow = dynamic(() => import('./StatRow'), { ssr: false })
 
 
-const TabContent = ({ data, onUpdate }: { data: TabData, onUpdate: any }) => {
+const TabContent = ({ data, onUpdate, onRoll, lastRoll }: { data: TabData, onUpdate: any, onRoll: any, lastRoll: number }) => {
   const { name, images, stats, extraStats } = data;
-
-  const [lastRoll, setLastRoll] = useState<number | null>(null);
-
-  const onRoll = (roll: number) => {
-    if (lastRoll !== roll) {
-      setLastRoll(roll);
-    }
-  }
 
   const handleStatUpdate = (section: string, index: string | number, updatedStat: any) => {
     const newData = { ...data };
@@ -40,24 +33,64 @@ const TabContent = ({ data, onUpdate }: { data: TabData, onUpdate: any }) => {
     onUpdate(newData);
   };
 
+
+  useEffect(() => {
+    const handleClickOutside = (event: Event) => {
+      try {
+        if (inputRef.current && (!inputRef.current as any).contains(event.target)) {
+          setEditingId(null);
+        }
+      } catch (error) { }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const inputRef = useRef(null);
+  const handleDoubleClick = (id: number) => {
+    setEditingId(id);
+  };
+
+  const handleNameChange = (id: number, newName: string) => {
+    const newData = { ...data };
+
+    newData.name = newName;
+    onUpdate(newData);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent, id: number) => {
+    if (e.key === 'Enter') {
+      setEditingId(null);
+    }
+  };
+
+
   return (
     <div className="bg-gray-800 rounded-lg p-6">
-      {/* Title */}
-      <h2 className="text-white text-xl mb-6">{name}</h2>
+      <div onDoubleClick={() => handleDoubleClick(1)}>
+        {editingId === 1 ? (
+          <input
+            ref={inputRef}
+            type="text"
+            value={name}
+            onChange={(e) => handleNameChange(1, e.target.value)}
+            onKeyPress={(e) => handleKeyPress(e, 1)}
+            onBlur={() => setEditingId(null)}
+            className="bg-transparent outline-none w-full text-white text-xl mb-6"
+            autoFocus
+          />
+        ) : (
+          <h2 className="text-white text-xl mb-6">{name}</h2>
+        )}
+      </div>
 
       <div className="flex gap-6">
         {/* Left Column - Images Section */}
         <div className="w-1/3 flex flex-col gap-4">
-          <div className="aspect-square bg-red-900/80 rounded-lg flex items-center justify-center text-white overflow-hidden">
-            {images.primary ? (
-              <img
-                src={images.primary}
-                alt="Primary"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span>Primary Image</span>
-            )}
+          <div className="aspect-square rounded-lg flex items-center justify-center text-white overflow-hidden">
+            <ImageUploader />
           </div>
           <DiceRoller onRoll={(roll: number) => onRoll(roll)} />
         </div>
@@ -75,7 +108,7 @@ const TabContent = ({ data, onUpdate }: { data: TabData, onUpdate: any }) => {
             </div>
 
             <div className="space-y-2">
-              <div className="grid grid-cols-2 gap-64 text-white font-medium">
+              <div className="grid grid-cols-2 space-x-32 text-white font-medium">
                 <div>Attribute Name</div>
                 <div>Value</div>
               </div>
