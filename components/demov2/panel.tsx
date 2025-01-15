@@ -54,7 +54,7 @@ const TabPanel = () => {
         ]
       }
     }
-  ]);
+  ]) as [any, (tab: any) => void];
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const inputRef = useRef(null);
@@ -74,7 +74,7 @@ const TabPanel = () => {
   }, []);
 
   const handleTabClick = (clickedId: number) => {
-    setTabs(tabs!.map(tab => ({
+    setTabs(tabs!.map((tab: any) => ({
       ...tab,
       active: tab.id === clickedId
     })));
@@ -85,7 +85,7 @@ const TabPanel = () => {
   };
 
   const handleNameChange = (id: number, newName: string) => {
-    setTabs(tabs!.map(tab =>
+    setTabs(tabs!.map((tab: any) =>
       tab.id === id ? { ...tab, name: newName } : tab
     ));
   };
@@ -106,16 +106,16 @@ const TabPanel = () => {
     console.log(tabs)
     e.stopPropagation();
 
-    if (tabs!.find(tab => tab.id === idToRemove)?.active && tabs!.length > 1) {
-      const index = tabs!.findIndex(tab => tab.id === idToRemove);
+    if (tabs!.find((tab: any) => tab.id === idToRemove)?.active && tabs!.length > 1) {
+      const index = tabs!.findIndex((tab: any) => tab.id === idToRemove);
       const newActiveIndex = Math.max(0, index - 1);
-      setTabs(prev => prev!.map((tab, i) => ({
+      setTabs((prev: any) => prev!.map((tab: any, i: number) => ({
         ...tab,
         active: i === newActiveIndex
-      })).filter(tab => tab.id !== idToRemove));
+      })).filter((tab: { id: number; }) => tab.id !== idToRemove));
       console.log(tabs)
     } else {
-      setTabs(prev => prev!.filter(tab => tab.id !== idToRemove));
+      setTabs((prev: any) => prev!.filter((tab: { id: number; }) => tab.id !== idToRemove));
       console.log(tabs)
     }
   };
@@ -149,7 +149,7 @@ const TabPanel = () => {
       </button>
 
       <div className="flex items-end gap-1">
-        {tabs!.map((tab) => (
+        {tabs!.map((tab: any) => (
           <div
             key={tab.id}
             onClick={() => handleTabClick(tab.id)}
@@ -197,7 +197,7 @@ const TabPanel = () => {
         </button>
       </div>
 
-      {tabs!.map(tab => tab.active && (
+      {tabs!.map((tab: any) => tab.active && (
         <TabContent
           key={tab.id}
           data={tab.data}
