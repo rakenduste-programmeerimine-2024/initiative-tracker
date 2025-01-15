@@ -8,8 +8,8 @@ const DICE_TYPES = [
   { sides: 6, color: 'bg-green-700/80 hover:bg-green-600/80' }
 ];
 
-const SingleDice = ({ sides, color }) => {
-  const [currentRoll, setCurrentRoll] = useState(null);
+const SingleDice = ({ sides, color }: typeof DICE_TYPES[number]) => {
+  const [currentRoll, setCurrentRoll] = useState<number | null>(null);
   const [isRolling, setIsRolling] = useState(false);
 
   const rollDice = () => {
