@@ -171,7 +171,7 @@ const TabPanel = () => {
                 type="text"
                 value={tab.name}
                 onChange={(e) => handleNameChange(tab.id, e.target.value)}
-                onKeyPress={(e) => handleKeyPress(e, tab.id)}
+                onKeyDown={(e) => handleKeyPress(e, tab.id)}
                 onBlur={() => setEditingId(null)}
                 className="bg-transparent outline-none w-full"
                 autoFocus

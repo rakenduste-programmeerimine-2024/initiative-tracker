@@ -45,6 +45,12 @@ const StatRow = ({ stat, onUpdate, onDelete, lastRoll }: { stat: any, onUpdate: 
     setIsEditing(false);
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSave();
+    }
+  };
+
   const handleCancel = () => {
     setEditedStat(stat);
     setIsEditing(false);
@@ -57,6 +63,7 @@ const StatRow = ({ stat, onUpdate, onDelete, lastRoll }: { stat: any, onUpdate: 
           className="bg-gray-700 rounded px-2 py-1"
           value={editedStat.attributeName}
           onChange={(e) => setEditedStat({ ...editedStat, attributeName: e.target.value })}
+          onKeyDown={(e) => handleKeyPress(e)}
         />
         <input
           className="bg-gray-700 rounded px-2 py-1"
@@ -66,6 +73,7 @@ const StatRow = ({ stat, onUpdate, onDelete, lastRoll }: { stat: any, onUpdate: 
             ...editedStat,
             value: editedStat.type === 'Number' ? Number(e.target.value) : e.target.value
           })}
+          onKeyDown={(e) => handleKeyPress(e)}
         />
 
         <div className="col-span-3 flex gap-2 mt-2">

@@ -84,7 +84,7 @@ const TabContent = ({ data, onUpdate, onRoll, lastRoll }: { data: TabData, onUpd
             type="text"
             value={name}
             onChange={(e) => handleNameChange(1, e.target.value)}
-            onKeyPress={(e) => handleKeyPress(e, 1)}
+            onKeyDown={(e) => handleKeyPress(e, 1)}
             onBlur={() => setEditingId(null)}
             className="bg-transparent outline-none w-full text-white text-xl mb-6"
             autoFocus
