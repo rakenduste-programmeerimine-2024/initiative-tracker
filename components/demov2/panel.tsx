@@ -3,9 +3,9 @@ import { useState, useRef, useEffect, MouseEvent } from 'react';
 import { Tab, TabData } from '.';
 import { createNewTab } from './utils';
 import dynamic from 'next/dynamic';
-import useLocalStorage from "./localStorage"
+import useLocalStorage from "./local-storage"
 
-const TabContent = dynamic(() => import('./TabContent'), { ssr: false })
+const TabContent = dynamic(() => import("./tab-content"), { ssr: false })
 
 const TabPanel = () => {
 
