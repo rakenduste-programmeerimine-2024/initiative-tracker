@@ -33,7 +33,7 @@ export default function RootLayout({
                   {/* Logo */}
                   <Link href={"/"}>
                     <Image
-                      src="/logo.png" 
+                      src="/logo.png"
                       alt="Website Logo"
                       width={203}
                       height={61}
@@ -46,6 +46,9 @@ export default function RootLayout({
                     </Link>
                     <Link href="/participants" className="text-sm text-red-500 hover:underline">
                       Participants
+                    </Link>
+                    <Link href="/demov2" className="text-sm text-red-500 hover:underline">
+                      DemoV2
                     </Link>
                     <HeaderAuth />
                     <ThemeSwitcher />
