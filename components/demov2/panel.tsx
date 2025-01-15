@@ -1,7 +1,11 @@
-'use client';
-import { useState, useRef, useEffect } from 'react';
-import { useLocalStorage } from './localstorage';
-import TabContent from './TabContent';
+
+import { useState, useRef, useEffect, MouseEvent } from 'react';
+import { useLocalStorage } from "react-use";
+import { Tab, TabData } from '.';
+import { createNewTab } from './utils';
+import dynamic from 'next/dynamic';
+
+const TabContent = dynamic(() => import('./TabContent'), { ssr: false })
 
 const TabPanel = () => {
   const [tabs, setTabs] = useLocalStorage('tabs', [
@@ -12,44 +16,37 @@ const TabPanel = () => {
       data: {
         name: 'Character Name',
         images: {
-          primary: '',
-          secondary: ''
+          primary: ''
         },
         stats: [
           {
             attributeName: 'Health',
-            type: 'Number',
             value: 100
           },
           {
             attributeName: 'Strength',
-            type: 'Number',
             value: 75
           },
           {
             attributeName: 'Class',
-            type: 'String',
             value: 'Warrior'
           }
         ],
         extraStats: [
           {
             attributeName: 'Experience',
-            type: 'Number',
             value: 1500
           },
           {
             attributeName: 'Level',
-            type: 'Number',
             value: 30
           }
         ]
       }
     }
-    // ... other tabs
   ]);
 
-  const [editingId, setEditingId] = useState(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const inputRef = useRef(null);
 
   // Handle click outside of input to stop editing
@@ -64,58 +61,76 @@ const TabPanel = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleTabClick = (clickedId) => {
-    setTabs(tabs.map(tab => ({
+  const handleTabClick = (clickedId: number) => {
+    setTabs(tabs!.map(tab => ({
       ...tab,
       active: tab.id === clickedId
     })));
   };
 
-  const handleDoubleClick = (id) => {
+  const handleDoubleClick = (id: number) => {
     setEditingId(id);
   };
 
-  const handleNameChange = (id, newName) => {
-    setTabs(tabs.map(tab =>
+  const handleNameChange = (id: number, newName: string) => {
+    setTabs(tabs!.map(tab =>
       tab.id === id ? { ...tab, name: newName } : tab
     ));
   };
 
-  const handleKeyPress = (e, id) => {
+  const handleKeyPress = (e: React.KeyboardEvent, id: number) => {
     if (e.key === 'Enter') {
       setEditingId(null);
     }
   };
 
   const addNewTab = () => {
-    const newTab = {
-      id: Date.now(), // Using timestamp for unique id
-      name: 'Name',
-      active: false
-    };
-    setTabs([...tabs, newTab]);
+    const newTab = createNewTab(tabs!.length + 1);
+    setTabs([...tabs!, newTab]);
   };
 
-  const removeTab = (idToRemove, e) => {
+  const removeTab = (idToRemove: number, e: MouseEvent) => {
     e.stopPropagation(); // Prevent tab activation when removing
 
     // If removing active tab, activate the previous tab
-    if (tabs.find(tab => tab.id === idToRemove)?.active && tabs.length > 1) {
-      const index = tabs.findIndex(tab => tab.id === idToRemove);
+    if (tabs!.find(tab => tab.id === idToRemove)?.active && tabs!.length > 1) {
+      const index = tabs!.findIndex(tab => tab.id === idToRemove);
       const newActiveIndex = Math.max(0, index - 1);
-      setTabs(prev => prev.map((tab, i) => ({
-        ...tab,
-        active: i === newActiveIndex
-      })).filter(tab => tab.id !== idToRemove));
+      setTabs((prevTabs: any) => {
+        const updatedTabs = prevTabs.map((tab: Tab, i: number) => ({
+          ...tab,
+          active: i === newActiveIndex
+        }));
+        return updatedTabs.filter((tab: Tab) => tab.id !== idToRemove) as unknown as any;
+      });
     } else {
-      setTabs(prev => prev.filter(tab => tab.id !== idToRemove));
+      setTabs((prevTabs: any) => {
+        const index = prevTabs.findIndex((tab: any) => tab.id === idToRemove);
+        const newTabs = prevTabs.filter((tab: any) => tab.id !== idToRemove);
+        if (newTabs.length > 0) {
+          if (index > 0) {
+            newTabs[index - 1].active = true;
+          } else {
+            newTabs[0].active = true;
+          }
+        }
+        return newTabs;
+      });
     }
+  };
+
+  const handleTabDataUpdate = (tabId: number, newData: TabData) => {
+    setTabs(tabs!.map((tab: any) =>
+      tab.id === tabId
+        ? { ...tab, data: newData }
+        : tab
+    ));
   };
 
   return (
     <div className="bg-gray-900 p-6">
       <div className="flex items-end gap-1">
-        {tabs.map((tab) => (
+        {tabs!.map((tab) => (
           <div
             key={tab.id}
             onClick={() => handleTabClick(tab.id)}
@@ -143,7 +158,7 @@ const TabPanel = () => {
               <>
                 <span>{tab.name}</span>
                 {/* Only show remove button if we have more than one tab */}
-                {tabs.length > 1 && (
+                {tabs!.length > 1 && (
                   <button
                     onClick={(e) => removeTab(tab.id, e)}
                     className="absolute -right-1 -top-1 opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 rounded-full w-4 h-4 flex items-center justify-center text-xs"
@@ -163,8 +178,12 @@ const TabPanel = () => {
         </button>
       </div>
 
-      {tabs.map(tab => tab.active && (
-        <TabContent key={tab.id} data={tab.data} />
+      {tabs!.map(tab => tab.active && (
+        <TabContent
+          key={tab.id}
+          data={tab.data}
+          onUpdate={(newData: TabData) => handleTabDataUpdate(tab.id, newData)}
+        />
       ))}
     </div>
   );

@@ -1,5 +1,5 @@
-'use client';
-import { useState } from 'react';
+
+import { createContext, useContext, useState } from 'react';
 
 const DICE_TYPES = [
   { sides: 20, color: 'bg-red-900/80 hover:bg-red-800/80' },
@@ -8,7 +8,7 @@ const DICE_TYPES = [
   { sides: 6, color: 'bg-green-700/80 hover:bg-green-600/80' }
 ];
 
-const SingleDice = ({ sides, color }: typeof DICE_TYPES[number]) => {
+const SingleDice = ({ sides, color, onRoll }: typeof DICE_TYPES[number] & { onRoll: any }) => {
   const [currentRoll, setCurrentRoll] = useState<number | null>(null);
   const [isRolling, setIsRolling] = useState(false);
 
@@ -26,6 +26,7 @@ const SingleDice = ({ sides, color }: typeof DICE_TYPES[number]) => {
         clearInterval(rollInterval);
         const finalRoll = Math.floor(Math.random() * sides) + 1;
         setCurrentRoll(finalRoll);
+        onRoll(finalRoll);
         setIsRolling(false);
       }
     }, 50);
@@ -58,7 +59,7 @@ const SingleDice = ({ sides, color }: typeof DICE_TYPES[number]) => {
   );
 };
 
-const DiceRoller = () => {
+const DiceRoller = (onRoll: any) => {
   return (
     <div className="grid grid-cols-2 gap-2">
       {DICE_TYPES.map(({ sides, color }) => (
@@ -66,6 +67,7 @@ const DiceRoller = () => {
           key={sides}
           sides={sides}
           color={color}
+          onRoll={(roll: number) => onRoll(roll)}
         />
       ))}
     </div>

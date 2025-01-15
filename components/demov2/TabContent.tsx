@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+
+import { useState } from "react";
 import { TabData } from ".";
-import StatRow from "./StatRow";
 import DiceRoller from "./DiceRoller";
+import dynamic from "next/dynamic";
+
+const StatRow = dynamic(() => import('./StatRow'), { ssr: false })
+
 
 const TabContent = ({ data, onUpdate }: { data: TabData, onUpdate: any }) => {
   const { name, images, stats, extraStats } = data;
 
   const [lastRoll, setLastRoll] = useState<number | null>(null);
 
-  function onRoll(roll: number) {
+  const onRoll = (roll: number) => {
     if (lastRoll !== roll) {
       setLastRoll(roll);
     }
@@ -83,6 +87,7 @@ const TabContent = ({ data, onUpdate }: { data: TabData, onUpdate: any }) => {
                   stat={stat}
                   onUpdate={(updatedStat: any) => handleStatUpdate('stats', (index as any), updatedStat)}
                   onDelete={() => handleStatDelete('stats', index)}
+                  lastRoll={lastRoll}
                 />
               ))}
 
@@ -100,8 +105,7 @@ const TabContent = ({ data, onUpdate }: { data: TabData, onUpdate: any }) => {
                   key={index}
                   stat={stat}
                   onUpdate={(updatedStat: any) => handleStatUpdate('extraStats', (index as any), updatedStat)}
-                  onDelete={() => handleStatDelete('extraStats', index)}
-                />
+                  onDelete={() => handleStatDelete('extraStats', index)} lastRoll={lastRoll} />
               ))}
             </div>
           </div>
