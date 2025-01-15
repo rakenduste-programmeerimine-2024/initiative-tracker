@@ -59,7 +59,7 @@ const TabContent = ({ data, onUpdate }: { data: TabData, onUpdate: any }) => {
               <span>Primary Image</span>
             )}
           </div>
-          <DiceRoller onRoll={onRoll} />
+          <DiceRoller onRoll={(roll: number) => onRoll(roll)} />
         </div>
 
         <div className="w-2/3">

@@ -67,7 +67,7 @@ const DiceRoller = (onRoll: any) => {
           key={sides}
           sides={sides}
           color={color}
-          onRoll={(roll: number) => onRoll(roll)}
+          onRoll={(roll: number) => onRoll.onRoll(roll)}
         />
       ))}
     </div>
