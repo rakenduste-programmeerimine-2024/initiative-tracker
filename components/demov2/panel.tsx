@@ -3,7 +3,7 @@ import { useState, useRef, useEffect, MouseEvent } from 'react';
 import { Tab, TabData } from '.';
 import { createNewTab } from './utils';
 import dynamic from 'next/dynamic';
-import useLocalStorage from './localstorage';
+import useLocalStorage from "./localStorage"
 
 const TabContent = dynamic(() => import('./TabContent'), { ssr: false })
 
