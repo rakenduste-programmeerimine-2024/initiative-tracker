@@ -87,7 +87,7 @@ const StatRow = ({ stat, onUpdate, onDelete, lastRoll }: { stat: any, onUpdate: 
   }
 
   return (
-    <div className="grid grid-cols-2 gap-64 text-white/70 group hover:bg-gray-800 p-2 rounded transition-colors">
+    <div className="grid grid-cols-2 space-x-32 text-white/70 group hover:bg-gray-800 p-2 rounded transition-colors">
       <div>{stat.attributeName}</div>
       <div className="flex items-center justify-between">
         <div className="relative">

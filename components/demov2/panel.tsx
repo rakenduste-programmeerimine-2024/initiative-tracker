@@ -8,6 +8,8 @@ import dynamic from 'next/dynamic';
 const TabContent = dynamic(() => import('./TabContent'), { ssr: false })
 
 const TabPanel = () => {
+
+  const [lastRoll, setLastRoll] = useState<number | null>(null);
   const [tabs, setTabs] = useLocalStorage('tabs', [
     {
       id: 1,
@@ -52,9 +54,11 @@ const TabPanel = () => {
   // Handle click outside of input to stop editing
   useEffect(() => {
     const handleClickOutside = (event: Event) => {
-      if (inputRef.current && (!inputRef.current as any).contains(event.target)) {
-        setEditingId(null);
-      }
+      try {
+        if (inputRef.current && (!inputRef.current as any).contains(event.target)) {
+          setEditingId(null);
+        }
+      } catch (error) { }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
@@ -127,6 +131,12 @@ const TabPanel = () => {
     ));
   };
 
+  const handleRoll = (roll: number) => {
+    if (lastRoll !== roll) {
+      setLastRoll(roll);
+    }
+  }
+
   return (
     <div className="bg-gray-900 p-6">
       <div className="flex items-end gap-1">
@@ -183,6 +193,8 @@ const TabPanel = () => {
           key={tab.id}
           data={tab.data}
           onUpdate={(newData: TabData) => handleTabDataUpdate(tab.id, newData)}
+          onRoll={(roll: number) => handleRoll(roll)}
+          lastRoll={lastRoll}
         />
       ))}
     </div>

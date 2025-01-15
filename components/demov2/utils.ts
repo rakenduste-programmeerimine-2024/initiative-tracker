@@ -1,10 +1,10 @@
 // new tab default values
 export const createNewTab = (id: number) => ({
   id,
-  name: 'New Tab',
+  name: 'Name',
   active: false,
   data: {
-    name: 'New Character',
+    name: 'Character Name',
     images: {
       primary: ''
     },
