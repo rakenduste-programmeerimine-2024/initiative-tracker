@@ -37,8 +37,8 @@ export async function getUserIdFromRequest(
 
   const token = authHeader.slice(7) // Remove "Bearer " prefix
   try {
-    const decoded = verifyToken<{ id: string }>(token)
-    return decoded.id
+    const decoded = verifyToken<{ sub: string }>(token)
+    return decoded.sub
   } catch {
     return null // Token verification failed
   }
