@@ -36,12 +36,20 @@ const TabPanel = () => {
         ],
         extraStats: [
           {
-            attributeName: 'Experience',
-            value: 1500
+            attributeName: 'Agility',
+            value: 50
           },
           {
-            attributeName: 'Level',
+            attributeName: 'Dexterity',
             value: 30
+          },
+          {
+            attributeName: 'Intelligence',
+            value: 20
+          },
+          {
+            attributeName: 'Charisma',
+            value: 10
           }
         ]
       }
