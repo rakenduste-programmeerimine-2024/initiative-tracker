@@ -5,7 +5,7 @@ const StatRow = ({ stat, onUpdate, onDelete, lastRoll }: { stat: any, onUpdate: 
   const [isEditing, setIsEditing] = useState(false);
   const [editedStat, setEditedStat] = useState(stat);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [animationType, setAnimationType] = useState(null);
+  const [animationType, setAnimationType] = useState<string | null>(null);
   const [previousValue, setPreviousValue] = useState(stat.value);
 
   useEffect(() => {

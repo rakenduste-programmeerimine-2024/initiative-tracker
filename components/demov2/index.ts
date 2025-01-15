@@ -17,4 +17,5 @@ export interface TabData {
   };
   stats: Stat[];
   extraStats: Stat[];
+  [key: string]: any;
 }

@@ -8,7 +8,7 @@ import ImageUploader from "./Image";
 const StatRow = dynamic(() => import('./StatRow'), { ssr: false })
 
 
-const TabContent = ({ data, onUpdate, onRoll, lastRoll }: { data: TabData, onUpdate: any, onRoll: any, lastRoll: number }) => {
+const TabContent = ({ data, onUpdate, onRoll, lastRoll }: { data: TabData, onUpdate: any, onRoll: any, lastRoll: number | null }) => {
   const { name, images, stats, extraStats } = data;
 
   const handleStatUpdate = (section: string, index: string | number, updatedStat: any) => {
