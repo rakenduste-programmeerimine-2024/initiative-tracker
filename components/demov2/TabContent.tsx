@@ -67,6 +67,14 @@ const TabContent = ({ data, onUpdate, onRoll, lastRoll }: { data: TabData, onUpd
   };
 
 
+  function handleImageChange(image: string) {
+    const newData = { ...data };
+
+    newData.images.primary = image;
+    onUpdate(newData);
+  }
+
+
   return (
     <div className="bg-gray-800 rounded-lg p-6">
       <div onDoubleClick={() => handleDoubleClick(1)}>
@@ -90,7 +98,7 @@ const TabContent = ({ data, onUpdate, onRoll, lastRoll }: { data: TabData, onUpd
         {/* Left Column - Images Section */}
         <div className="w-1/3 flex flex-col gap-4">
           <div className="aspect-square rounded-lg flex items-center justify-center text-white overflow-hidden">
-            <ImageUploader />
+            <ImageUploader image={images.primary} onUpdate={handleImageChange} />
           </div>
           <DiceRoller onRoll={(roll: number) => onRoll(roll)} />
         </div>
