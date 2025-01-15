@@ -1,6 +1,5 @@
 export interface Stat {
   attributeName: string;
-  type: string;
   value: string | number;
 }
 
