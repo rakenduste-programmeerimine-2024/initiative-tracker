@@ -2,10 +2,10 @@
 import { createContext, useContext, useState } from 'react';
 
 const DICE_TYPES = [
-  { sides: 20, color: 'bg-red-900/80 hover:bg-red-800/80' },
-  { sides: 12, color: 'bg-orange-700/80 hover:bg-orange-600/80' },
-  { sides: 8, color: 'bg-yellow-700/80 hover:bg-yellow-600/80' },
-  { sides: 6, color: 'bg-green-700/80 hover:bg-green-600/80' }
+  { sides: 20, color: 'bg-gray-700/80 hover:bg-gray-600/80' },
+  { sides: 12, color: 'bg-gray-700/80 hover:bg-gray-600/80' },
+  { sides: 8, color: 'bg-gray-700/80 hover:bg-gray-600/80' },
+  { sides: 6, color: 'bg-gray-700/80 hover:bg-gray-600/80' }
 ];
 
 const SingleDice = ({ sides, color, onRoll }: typeof DICE_TYPES[number] & { onRoll: any }) => {
@@ -42,17 +42,20 @@ const SingleDice = ({ sides, color, onRoll }: typeof DICE_TYPES[number] & { onRo
         ${isRolling ? 'scale-105' : 'scale-100'}
       `}
     >
-      <div className="flex flex-col items-center">
-        <div className="text-white text-sm mb-1">
+      <div className='relative'>
+        <div className="text-white text-sm font-bold mb-1 flex justify-center">
           d{sides}
         </div>
-        <div
-          className={`
-            text-2xl font-bold text-white
+        <img src="/d20.png" alt="dice" className='object-cover' />
+        <div className="flex flex-col items-center absolute inset-0 justify-center text-white text-xl font-bold ">
+          <div
+            className={`
+            text-2xl font-bold text-white pt-4
             ${isRolling ? 'animate-bounce' : ''}
-          `}
-        >
-          {currentRoll || '?'}
+            `}
+          >
+            {currentRoll || '?'}
+          </div>
         </div>
       </div>
     </div>
