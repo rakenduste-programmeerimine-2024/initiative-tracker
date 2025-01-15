@@ -1,41 +1,32 @@
+import { on } from 'events';
 import { useState, useEffect } from 'react';
 
-const Image = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
+const Image = ({ image, onUpdate }: { image: string, onUpdate: any }) => {
 
-  // Load image from localStorage on component mount
-  useEffect(() => {
-    const savedImage = localStorage.getItem('savedImage');
-    if (savedImage) {
-      setSelectedImage(savedImage);
-    }
-  }, []);
-
-  const handleImageChange = (e) => {
+  const handleImageChange = (e: any) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result;
-        setSelectedImage(base64String);
-        localStorage.setItem('savedImage', base64String);
+        onUpdate(base64String);
+        //localStorage.setItem('savedImage', base64String);
       };
       reader.readAsDataURL(file);
     }
   };
 
   const handleRemoveImage = () => {
-    setSelectedImage(null);
-    localStorage.removeItem('savedImage');
+    onUpdate("");
   };
 
   return (
     <div className="max-w-md mx-auto p-4">
       <div className=" border-gray-300 rounded-lg p-4">
-        {selectedImage ? (
+        {image !== "" ? (
           <div className="relative">
             <img
-              src={selectedImage}
+              src={image}
               alt="Selected"
               className="w-full h-64 object-cover rounded-lg"
             />
