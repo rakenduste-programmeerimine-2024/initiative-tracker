@@ -1,5 +1,3 @@
-import { on } from 'events';
-import { useState, useEffect } from 'react';
 
 const Image = ({ image, onUpdate }: { image: string, onUpdate: any }) => {
 

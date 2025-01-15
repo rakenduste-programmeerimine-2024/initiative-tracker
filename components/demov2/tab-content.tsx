@@ -54,7 +54,7 @@ const TabContent = ({
         ) {
           setEditingId(null)
         }
-      } catch (error) {}
+      } catch (error) { }
     }
 
     document.addEventListener("mousedown", handleClickOutside)
