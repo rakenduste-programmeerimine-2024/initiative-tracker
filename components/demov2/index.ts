@@ -14,7 +14,6 @@ export interface TabData {
   name: string;
   images: {
     primary: string;
-    secondary: string;
   };
   stats: Stat[];
   extraStats: Stat[];

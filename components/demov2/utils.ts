@@ -6,13 +6,11 @@ export const createNewTab = (id: number) => ({
   data: {
     name: 'New Character',
     images: {
-      primary: '',
-      secondary: ''
+      primary: ''
     },
     stats: [
       {
         attributeName: 'New Stat',
-        type: 'Number',
         value: 0
       }
     ],
