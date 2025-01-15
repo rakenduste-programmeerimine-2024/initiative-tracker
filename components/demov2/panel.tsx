@@ -1,9 +1,9 @@
 
 import { useState, useRef, useEffect, MouseEvent } from 'react';
-import { useLocalStorage } from "react-use";
 import { Tab, TabData } from '.';
 import { createNewTab } from './utils';
 import dynamic from 'next/dynamic';
+import useLocalStorage from './localstorage';
 
 const TabContent = dynamic(() => import('./TabContent'), { ssr: false })
 
@@ -102,32 +102,21 @@ const TabPanel = () => {
   };
 
   const removeTab = (idToRemove: number, e: MouseEvent) => {
-    e.stopPropagation(); // Prevent tab activation when removing
+    console.log(idToRemove)
+    console.log(tabs)
+    e.stopPropagation();
 
-    // If removing active tab, activate the previous tab
     if (tabs!.find(tab => tab.id === idToRemove)?.active && tabs!.length > 1) {
       const index = tabs!.findIndex(tab => tab.id === idToRemove);
       const newActiveIndex = Math.max(0, index - 1);
-      setTabs((prevTabs: any) => {
-        const updatedTabs = prevTabs.map((tab: Tab, i: number) => ({
-          ...tab,
-          active: i === newActiveIndex
-        }));
-        return updatedTabs.filter((tab: Tab) => tab.id !== idToRemove) as unknown as any;
-      });
+      setTabs(prev => prev!.map((tab, i) => ({
+        ...tab,
+        active: i === newActiveIndex
+      })).filter(tab => tab.id !== idToRemove));
+      console.log(tabs)
     } else {
-      setTabs((prevTabs: any) => {
-        const index = prevTabs.findIndex((tab: any) => tab.id === idToRemove);
-        const newTabs = prevTabs.filter((tab: any) => tab.id !== idToRemove);
-        if (newTabs.length > 0) {
-          if (index > 0) {
-            newTabs[index - 1].active = true;
-          } else {
-            newTabs[0].active = true;
-          }
-        }
-        return newTabs;
-      });
+      setTabs(prev => prev!.filter(tab => tab.id !== idToRemove));
+      console.log(tabs)
     }
   };
 
