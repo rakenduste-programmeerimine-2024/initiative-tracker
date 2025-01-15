@@ -137,8 +137,20 @@ const TabPanel = () => {
     }
   }
 
+  function handleReset() {
+    localStorage.removeItem("tabs");
+    window.location.reload();
+  }
+
   return (
-    <div className="bg-gray-900 p-6">
+    <div className="bg-gray-900 p-6 relative">
+      <button
+        onClick={handleReset}
+        className="absolute top-0 right-0 m-2 px-4 py-2 bg-red-600 text-white rounded-lg shadow-lg hover:bg-red-700 transition-colors duration-200"
+      >
+        Reset
+      </button>
+
       <div className="flex items-end gap-1">
         {tabs!.map((tab) => (
           <div
