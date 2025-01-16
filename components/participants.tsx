@@ -18,7 +18,17 @@ export default function Participants() {
   }
 
   const removeParticipant = (index: number) => {
-    setParticipants(participants.filter((_, i) => i !== index))
+    if (index === 0) {
+      setParticipants(prev =>
+        prev.map((p, i) =>
+          i === 0
+            ? { ...p, name: "", dexterity: 10, dexModifier: 0, hp: 0, ac: 10 }
+            : p,
+        ),
+      )
+    } else {
+      setParticipants(participants.filter((_, i) => i !== index))
+    }
   }
 
   return (
