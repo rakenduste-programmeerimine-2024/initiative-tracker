@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react"
-import { TabData } from "."
-import DiceRoller from "./dice-roller"
-import dynamic from "next/dynamic"
-import ImageUploader from "./image"
+import { useEffect, useRef, useState } from "react";
+import { TabData } from ".";
+import DiceRoller from "./dice-roller";
+import dynamic from "next/dynamic";
+import ImageUploader from "./image";
 
-const StatRow = dynamic(() => import("./stat-row"), { ssr: false })
+const StatRow = dynamic(() => import("./stat-row"), { ssr: false });
 
 const TabContent = ({
   data,
@@ -12,38 +12,38 @@ const TabContent = ({
   onRoll,
   lastRoll,
 }: {
-  data: TabData
-  onUpdate: any
-  onRoll: any
-  lastRoll: number | null
+  data: TabData;
+  onUpdate: any;
+  onRoll: any;
+  lastRoll: number | null;
 }) => {
-  const { name, images, stats, extraStats } = data
+  const { name, images, stats, extraStats } = data;
 
   const handleStatUpdate = (
     section: string,
     index: string | number,
-    updatedStat: any,
+    updatedStat: any
   ) => {
-    const newData = { ...data }
-    newData[section][index] = updatedStat
-    onUpdate(newData)
-  }
+    const newData = { ...data };
+    newData[section][index] = updatedStat;
+    onUpdate(newData);
+  };
 
   const handleStatDelete = (section: string, index: any) => {
-    const newData = { ...data }
-    newData[section] = newData[section].filter((_: any, i: any) => i !== index)
-    onUpdate(newData)
-  }
+    const newData = { ...data };
+    newData[section] = newData[section].filter((_: any, i: any) => i !== index);
+    onUpdate(newData);
+  };
 
   const handleAddStat = (section: string) => {
-    const newData = { ...data }
+    const newData = { ...data };
     const newStat = {
       attributeName: "New Stat",
       value: 0,
-    }
-    newData[section] = [...newData[section], newStat]
-    onUpdate(newData)
-  }
+    };
+    newData[section] = [...newData[section], newStat];
+    onUpdate(newData);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: Event) => {
@@ -61,30 +61,32 @@ const TabContent = ({
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
-  const [editingId, setEditingId] = useState<number | null>(null)
-  const inputRef = useRef(null)
+
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const inputRef = useRef(null);
+
   const handleDoubleClick = (id: number) => {
-    setEditingId(id)
-  }
+    setEditingId(id);
+  };
 
   const handleNameChange = (id: number, newName: string) => {
-    const newData = { ...data }
+    const newData = { ...data };
 
-    newData.name = newName
-    onUpdate(newData)
-  }
+    newData.name = newName;
+    onUpdate(newData);
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent, id: number) => {
     if (e.key === "Enter") {
-      setEditingId(null)
+      setEditingId(null);
     }
-  }
+  };
 
   function handleImageChange(image: string) {
-    const newData = { ...data }
+    const newData = { ...data };
 
-    newData.images.primary = image
-    onUpdate(newData)
+    newData.images.primary = image;
+    onUpdate(newData);
   }
 
   return (
@@ -95,8 +97,8 @@ const TabContent = ({
             ref={inputRef}
             type="text"
             value={name}
-            onChange={e => handleNameChange(1, e.target.value)}
-            onKeyDown={e => handleKeyPress(e, 1)}
+            onChange={(e) => handleNameChange(1, e.target.value)}
+            onKeyDown={(e) => handleKeyPress(e, 1)}
             onBlur={() => setEditingId(null)}
             className="bg-transparent outline-none w-full text-white text-xl mb-6"
             autoFocus
@@ -110,10 +112,7 @@ const TabContent = ({
         {/* Left Column - Images Section */}
         <div className="w-1/3 flex flex-col gap-4">
           <div className="aspect-square rounded-lg flex items-center justify-center text-white overflow-hidden">
-            <ImageUploader
-              image={images.primary}
-              onUpdate={handleImageChange}
-            />
+            <ImageUploader image={images.primary} onUpdate={handleImageChange} />
           </div>
           <DiceRoller onRoll={(roll: number) => onRoll(roll)} />
         </div>
@@ -137,19 +136,17 @@ const TabContent = ({
               </div>
               <div className="h-px bg-gray-700" />
 
-              {data.stats.map(
-                (stat: unknown, index: React.Key | null | undefined) => (
-                  <StatRow
-                    key={index}
-                    stat={stat}
-                    onUpdate={(updatedStat: any) =>
-                      handleStatUpdate("stats", index as any, updatedStat)
-                    }
-                    onDelete={() => handleStatDelete("stats", index)}
-                    lastRoll={lastRoll}
-                  />
-                ),
-              )}
+              {data.stats.map((stat, index) => (
+                <StatRow
+                  key={index}
+                  stat={stat}
+                  onUpdate={(updatedStat: any) =>
+                    handleStatUpdate("stats", index, updatedStat)
+                  }
+                  onDelete={() => handleStatDelete("stats", index)}
+                  lastRoll={lastRoll}
+                />
+              ))}
 
               <div className="flex justify-between items-center pt-6 mb-4">
                 <h3 className="text-white text-lg">Extra</h3>
@@ -160,25 +157,32 @@ const TabContent = ({
                   + Add Extra
                 </button>
               </div>
-              {data.extraStats.map(
-                (stat: unknown, index: React.Key | null | undefined) => (
-                  <StatRow
-                    key={index}
-                    stat={stat}
-                    onUpdate={(updatedStat: any) =>
-                      handleStatUpdate("extraStats", index as any, updatedStat)
-                    }
-                    onDelete={() => handleStatDelete("extraStats", index)}
-                    lastRoll={lastRoll}
-                  />
-                ),
-              )}
+              {data.extraStats.map((stat, index) => (
+                <StatRow
+                  key={index}
+                  stat={stat}
+                  onUpdate={(updatedStat: any) =>
+                    handleStatUpdate("extraStats", index, updatedStat)
+                  }
+                  onDelete={() => handleStatDelete("extraStats", index)}
+                  lastRoll={lastRoll}
+                />
+              ))}
             </div>
           </div>
         </div>
       </div>
-    </div>
-  )
-}
 
-export default TabContent
+      {/* Save Current Encounter Button */}
+      <div className="flex justify-end mt-4">
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500"
+        >
+          Save Current Encounter
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default TabContent;
