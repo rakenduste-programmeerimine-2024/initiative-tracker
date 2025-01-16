@@ -45,6 +45,23 @@ const TabContent = ({
     onUpdate(newData);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: Event) => {
+      try {
+        if (
+          inputRef.current &&
+          (!inputRef.current as any).contains(event.target)
+        ) {
+          setEditingId(null)
+        }
+      } catch (error) { }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
+
   const [editingId, setEditingId] = useState<number | null>(null);
   const inputRef = useRef(null);
 
