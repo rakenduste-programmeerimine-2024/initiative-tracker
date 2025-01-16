@@ -18,7 +18,21 @@ export default function Participants() {
   }
 
   const removeParticipant = (index: number) => {
-    setParticipants(participants.filter((_, i) => i !== index))
+    if (index === 0) {
+      setParticipants(prev =>
+        prev.map((p, i) =>
+          i === 0
+            ? { ...p, name: "", dexterity: 10, dexModifier: 0, hp: 0, ac: 10 }
+            : p,
+        ),
+      )
+    } else {
+      setParticipants(participants.filter((_, i) => i !== index))
+    }
+  }
+
+  const saveParticipants = () => {
+    console.log("Saving participants:", participants) // vaja andmebaasiga ühendada
   }
 
   return (
@@ -115,6 +129,12 @@ export default function Participants() {
           className="px-4 py-2 bg-[#6a040f] text-white rounded hover:bg-[#9d0208]"
         >
           Add Participant
+        </button>
+        <button
+          onClick={saveParticipants}
+          className="px-4 py-2 bg-[#6a040f] text-white rounded hover:bg-[#9d0208]"
+        >
+          Save Participants
         </button>
       </div>
     </div>
