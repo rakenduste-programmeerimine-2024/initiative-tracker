@@ -31,6 +31,10 @@ export default function Participants() {
     }
   }
 
+  const saveParticipants = () => {
+    console.log("Saving participants:", participants) // vaja andmebaasiga ühendada
+  }
+
   return (
     <div className="p-6 bg-[#1c1c1e] rounded-md shadow-md">
       <div className="overflow-x-auto">
@@ -125,6 +129,12 @@ export default function Participants() {
           className="px-4 py-2 bg-[#6a040f] text-white rounded hover:bg-[#9d0208]"
         >
           Add Participant
+        </button>
+        <button
+          onClick={saveParticipants}
+          className="px-4 py-2 bg-[#6a040f] text-white rounded hover:bg-[#9d0208]"
+        >
+          Save Participants
         </button>
       </div>
     </div>
