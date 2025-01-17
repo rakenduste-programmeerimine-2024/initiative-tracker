@@ -4,33 +4,46 @@ import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { SmtpMessage } from "../smtp-message";
 
 export default async function ForgotPassword(props: {
   searchParams: Promise<Message>;
 }) {
   const searchParams = await props.searchParams;
+
   return (
-    <>
-      <form className="flex-1 flex flex-col w-full gap-2 text-foreground [&>input]:mb-6 min-w-64 max-w-64 mx-auto">
+    <div className="p-8 rounded-md shadow-lg max-w-lg mx-auto mt-10 bg-[#1c1c1e] border border-[#2c2c2e]">
+      <h1 className="text-3xl font-bold mb-2 text-center text-[#e63946]">
+        Reset Password
+      </h1>
+      <p className="text-center text-sm text-[#f4f4f5] mb-9">
+        Already have an account?{" "}
+        <Link className="text-[#e63946] font-medium underline" href="/sign-in">
+          Sign in
+        </Link>
+      </p>
+      <form className="space-y-6">
         <div>
-          <h1 className="text-2xl font-medium">Reset Password</h1>
-          <p className="text-sm text-secondary-foreground">
-            Already have an account?{" "}
-            <Link className="text-primary underline" href="/sign-in">
-              Sign in
-            </Link>
-          </p>
+          <Label htmlFor="email" className="block text-sm font-medium text-[#f4f4f5]">
+            Email
+          </Label>
+          <Input
+            name="email"
+            placeholder="something@mail.com"
+            required
+            className="block w-full px-4 py-2 rounded-md bg-[#2c2c2e] text-[#f4f4f5] border border-[#3c3c3e]"
+          />
         </div>
-        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-          <Label htmlFor="email">Email</Label>
-          <Input name="email" placeholder="you@example.com" required />
-          <SubmitButton formAction={forgotPasswordAction}>
+        <div className="flex justify-center">
+          <SubmitButton
+            formAction={forgotPasswordAction}
+            pendingText="Resetting..."
+            className="px-7 py-6 bg-red-600 text-white hover:bg-red-700 rounded"
+          >
             Reset Password
           </SubmitButton>
-          <FormMessage message={searchParams} />
         </div>
+        <FormMessage message={searchParams} />
       </form>
-    </>
+    </div>
   );
 }
