@@ -1,5 +1,6 @@
 import DiceRoller from "@/components/dice-roller";
 import Tracker from "@/components/tracker";
+import ThreeScene from "@/components/threejs/three-scene";
 
 export default function TrackerPage() {
   return (
@@ -8,6 +9,8 @@ export default function TrackerPage() {
         <section>
           <Tracker />
         </section>
+        <ThreeScene />
       </div>
+      
   );
 }
