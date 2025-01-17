@@ -36,6 +36,9 @@ export default function DiceRoller() {
         <button className="px-4 py-2 bg-[#e63946] text-white rounded shadow hover:bg-[#d62839] focus:outline-none">
           Batch Roll D20
         </button>
+        <button className="px-4 py-2 bg-[#6a040f] text-white rounded shadow hover:bg-[#9d0208] focus:outline-none">
+          Batch Roll D12
+        </button>
       </div>
       {result !== null && (
         <p className="text-xl font-bold">
