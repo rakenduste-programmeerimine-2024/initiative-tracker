@@ -12,12 +12,20 @@ const ThreeScene: React.FC = () => {
       const renderer = new THREE.WebGLRenderer();
 
       renderer.setSize(window.innerWidth, window.innerHeight);
-
       containerRef.current?.appendChild(renderer.domElement);
 
+      const loader = new THREE.TextureLoader();
+      const materials = [
+        new THREE.MeshBasicMaterial({ map: loader.load("/side1.png") }),
+        new THREE.MeshBasicMaterial({ map: loader.load("/side2.png") }),
+        new THREE.MeshBasicMaterial({ map: loader.load("/side3.png") }),
+        new THREE.MeshBasicMaterial({ map: loader.load("/side4.png") }),
+        new THREE.MeshBasicMaterial({ map: loader.load("/side5.png") }),
+        new THREE.MeshBasicMaterial({ map: loader.load("/side6.png") }),
+      ];
+
       const geometry = new THREE.BoxGeometry();
-      const material = new THREE.MeshBasicMaterial({ color: 0x8000FF });
-      const cube = new THREE.Mesh(geometry, material);
+      const cube = new THREE.Mesh(geometry, materials);
       scene.add(cube);
 
       camera.position.z = 5;
