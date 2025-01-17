@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 
@@ -19,7 +21,15 @@ const ThreeScene: React.FC = () => {
       scene.add(cube);
 
       camera.position.z = 5;
-      renderer.render(scene, camera);
+
+      const renderScene = () => {
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+        renderer.render(scene, camera);
+        requestAnimationFrame(renderScene);
+      };
+
+      renderScene();
     }
   }, []);
 
