@@ -135,8 +135,7 @@ export default function Tracker() {
                   />
                 </td>
                 <td className="p-2 border-b border-[#2c2c2e]">
-                  <input
-                    type="text"
+                  <select
                     value={participant.group}
                     onChange={e =>
                       setParticipants(prev =>
@@ -146,7 +145,14 @@ export default function Tracker() {
                       )
                     }
                     className="bg-[#2c2c2e] text-[#f4f4f5] rounded p-1 w-full"
-                  />
+                  >
+                    <option value="">Select</option>
+                    <option value="Group A">1</option>
+                    <option value="Group B">2</option>
+                    <option value="Group C">3</option>
+                    <option value="Group D">4</option>
+                    <option value="Group E">5</option>
+                  </select>
                 </td>
                 <td className="p-2 border-b border-[#2c2c2e]">
                   <button
