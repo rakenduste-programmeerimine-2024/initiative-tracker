@@ -42,6 +42,7 @@ export default function EncounterList({ userId }: { userId: string }) {
       <p className="text-center text-gray-500">No saved encounters found.</p>
     );
   }
+
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold text-center text-[#e63946]">
@@ -59,9 +60,18 @@ export default function EncounterList({ userId }: { userId: string }) {
             <p className="text-sm text-gray-400">
               Saved on: {new Date(encounter.created_at).toLocaleString()}
             </p>
+            {/* Add logic to handle reopening */}
+            <button
+              className="mt-2 px-4 py-2 bg-[#2c2c2e] text-white rounded shadow hover:bg-[#3c3c3e]"
+              onClick={() => {
+                console.log(`Reopening encounter ID: ${encounter.id}`);
+              }}
+            >
+              Reopen Encounter
+            </button>
           </li>
         ))}
       </ul>
     </div>
-  );  
+  );
 }
