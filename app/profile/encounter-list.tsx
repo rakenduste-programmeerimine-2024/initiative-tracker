@@ -42,5 +42,26 @@ export default function EncounterList({ userId }: { userId: string }) {
       <p className="text-center text-gray-500">No saved encounters found.</p>
     );
   }
+  return (
+    <div className="space-y-4">
+      <h2 className="text-2xl font-bold text-center text-[#e63946]">
+        Saved Encounters
+      </h2>
+      <ul className="space-y-2">
+        {encounters.map((encounter) => (
+          <li
+            key={encounter.id}
+            className="p-4 bg-gray-800 rounded-md shadow-md"
+          >
+            <h3 className="text-lg font-semibold text-[#f4f4f5]">
+              {encounter.name}
+            </h3>
+            <p className="text-sm text-gray-400">
+              Saved on: {new Date(encounter.created_at).toLocaleString()}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );  
 }
-  
