@@ -4,7 +4,7 @@ import { useState } from "react"
 
 export default function Tracker() {
   const [participants, setParticipants] = useState([
-    { initiative: "", name: "", hp: "", ac: "", group: "" },
+    { initiative: "", name: "", hp: "", ac: "", group: "", selected: false },
   ])
   const [round, setRound] = useState(1)
   const [activeIndex, setActiveIndex] = useState(0)
@@ -12,7 +12,7 @@ export default function Tracker() {
   const addParticipant = () => {
     setParticipants([
       ...participants,
-      { initiative: "", name: "", hp: "", ac: "", group: "" },
+      { initiative: "", name: "", hp: "", ac: "", group: "", selected: false },
     ])
   }
 
@@ -20,7 +20,16 @@ export default function Tracker() {
     if (index === 0) {
       setParticipants(prev =>
         prev.map((p, i) =>
-          i === 0 ? { initiative: "", name: "", hp: "", ac: "", group: "" } : p,
+          i === 0
+            ? {
+                initiative: "",
+                name: "",
+                hp: "",
+                ac: "",
+                group: "",
+                selected: false,
+              }
+            : p,
         ),
       )
     } else {
@@ -33,7 +42,7 @@ export default function Tracker() {
 
   const clearParticipants = () => {
     setParticipants([
-      { initiative: "", name: "", hp: "", ac: "", group: "" },
+      { initiative: "", name: "", hp: "", ac: "", group: "", selected: false },
     ])
     setActiveIndex(0)
   }
@@ -56,6 +65,12 @@ export default function Tracker() {
     setActiveIndex(prev => (prev + 1) % participants.length)
   }
 
+  const toggleSelect = (index: number) => {
+    setParticipants(prev =>
+      prev.map((p, i) => (i === index ? { ...p, selected: !p.selected } : p)),
+    )
+  }
+
   const getHpColor = (hp: string) => {
     const value = Number(hp)
     if (value > 80) return "bg-[#4caf50]"
@@ -69,6 +84,7 @@ export default function Tracker() {
         <table className="min-w-full table-auto text-[#f4f4f5]">
           <thead>
             <tr>
+              <th className="p-2 border-b border-[#2c2c2e]">Select</th>
               <th className="p-2 border-b border-[#2c2c2e]">Initiative</th>
               <th className="p-2 border-b border-[#2c2c2e]">Name</th>
               <th className="p-2 border-b border-[#2c2c2e]">HP</th>
@@ -84,6 +100,14 @@ export default function Tracker() {
                   index === activeIndex ? "bg-[#3c3c3e] text-[#f77f85]" : ""
                 }`}
               >
+                <td className="p-2 border-b border-[#2c2c2e]">
+                  <input
+                    type="checkbox"
+                    checked={participant.selected}
+                    onChange={() => toggleSelect(index)}
+                    className="form-checkbox"
+                  />
+                </td>
                 <td className="p-2 border-b border-[#2c2c2e]">
                   <input
                     type="number"
