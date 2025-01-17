@@ -1,6 +1,6 @@
 "use client"
-
 import { useState } from "react"
+import DiceRoller from "./dice-roller"
 
 export default function Tracker() {
   const [participants, setParticipants] = useState([
@@ -8,6 +8,16 @@ export default function Tracker() {
   ])
   const [round, setRound] = useState(1)
   const [activeIndex, setActiveIndex] = useState(0)
+
+  const handleBatchRoll = (rolls: number[]) => {
+    setParticipants(prev =>
+      prev.map((p, i) =>
+        p.selected && rolls[i] !== undefined
+          ? { ...p, initiative: rolls[i].toString() }
+          : p,
+      ),
+    )
+  }
 
   const addParticipant = () => {
     setParticipants([
@@ -80,6 +90,7 @@ export default function Tracker() {
 
   return (
     <div className="p-6 bg-[#1c1c1e] rounded-md shadow-md">
+      <DiceRoller onBatchRoll={handleBatchRoll} />
       <div className="overflow-x-auto">
         <table className="min-w-full table-auto text-[#f4f4f5]">
           <thead>
@@ -201,7 +212,6 @@ export default function Tracker() {
           </tbody>
         </table>
       </div>
-
       <div className="flex justify-between items-center mt-4">
         <div className="space-x-2">
           <button

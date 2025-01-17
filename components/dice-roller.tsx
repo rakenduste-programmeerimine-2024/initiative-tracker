@@ -1,7 +1,11 @@
 "use client"
 import { useState } from "react"
 
-export default function DiceRoller() {
+interface DiceRollerProps {
+  onBatchRoll: (rolls: number[]) => void
+}
+
+export default function DiceRoller({ onBatchRoll }: DiceRollerProps) {
   const [result, setResult] = useState<number | null>(null)
 
   const rollDice = (sides: number) => {
@@ -14,6 +18,7 @@ export default function DiceRoller() {
       { length: count },
       () => Math.floor(Math.random() * sides) + 1,
     )
+    onBatchRoll(rolls)
     return rolls
   }
 
