@@ -1,5 +1,4 @@
 "use client"
-
 import { useState } from "react"
 
 export default function DiceRoller() {
@@ -8,6 +7,14 @@ export default function DiceRoller() {
   const rollDice = (sides: number) => {
     const roll = Math.floor(Math.random() * sides) + 1
     setResult(roll)
+  }
+
+  const batchRoll = (sides: number, count: number) => {
+    const rolls = Array.from(
+      { length: count },
+      () => Math.floor(Math.random() * sides) + 1,
+    )
+    return rolls
   }
 
   return (
@@ -33,13 +40,22 @@ export default function DiceRoller() {
         </button>
       </div>
       <div className="flex gap-4 mb-6">
-        <button className="px-4 py-2 bg-[#e63946] text-white rounded shadow hover:bg-[#d62839] focus:outline-none">
+        <button
+          onClick={() => batchRoll(20, 5)}
+          className="px-4 py-2 bg-[#e63946] text-white rounded shadow hover:bg-[#d62839] focus:outline-none"
+        >
           Batch Roll D20
         </button>
-        <button className="px-4 py-2 bg-[#6a040f] text-white rounded shadow hover:bg-[#9d0208] focus:outline-none">
+        <button
+          onClick={() => batchRoll(12, 5)}
+          className="px-4 py-2 bg-[#6a040f] text-white rounded shadow hover:bg-[#9d0208] focus:outline-none"
+        >
           Batch Roll D12
         </button>
-        <button className="px-4 py-2 bg-[#2c2c2e] text-white rounded shadow hover:bg-[#3c3c3e] focus:outline-none">
+        <button
+          onClick={() => batchRoll(6, 5)}
+          className="px-4 py-2 bg-[#2c2c2e] text-white rounded shadow hover:bg-[#3c3c3e] focus:outline-none"
+        >
           Batch Roll D6
         </button>
       </div>
