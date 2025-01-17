@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState } from "react"
 
 export default function DiceRoller() {
-  const [result, setResult] = useState<number | null>(null);
+  const [result, setResult] = useState<number | null>(null)
 
   const rollDice = (sides: number) => {
-    const roll = Math.floor(Math.random() * sides) + 1;
-    setResult(roll);
-  };
+    const roll = Math.floor(Math.random() * sides) + 1
+    setResult(roll)
+  }
 
   return (
     <div className="flex flex-col items-center p-4 bg-[#1c1c1e] text-[#f4f4f5] rounded-lg shadow-md border border-[#2c2c2e]">
@@ -32,11 +32,16 @@ export default function DiceRoller() {
           Roll D6
         </button>
       </div>
+      <div className="flex gap-4 mb-6">
+        <button className="px-4 py-2 bg-[#e63946] text-white rounded shadow hover:bg-[#d62839] focus:outline-none">
+          Batch Roll D20
+        </button>
+      </div>
       {result !== null && (
         <p className="text-xl font-bold">
           You rolled: <span className="text-[#e63946]">{result}</span>
         </p>
       )}
     </div>
-  );
+  )
 }
