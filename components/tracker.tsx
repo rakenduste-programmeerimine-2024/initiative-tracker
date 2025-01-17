@@ -24,7 +24,9 @@ export default function Tracker() {
   }
 
   const clearParticipants = () => {
-    setParticipants([])
+    setParticipants([
+      { initiative: "", name: "", hp: "", ac: "", group: "" },
+    ])
     setActiveIndex(0)
   }
 
