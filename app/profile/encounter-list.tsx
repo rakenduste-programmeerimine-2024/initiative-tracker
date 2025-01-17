@@ -33,5 +33,14 @@ export default function EncounterList({ userId }: { userId: string }) {
     fetchEncounters();
   }, [userId]);
 
-  return null;
+  if (loading) {
+    return <p className="text-center text-gray-500">Loading encounters...</p>;
+  }
+
+  if (encounters.length === 0) {
+    return (
+      <p className="text-center text-gray-500">No saved encounters found.</p>
+    );
+  }
 }
+  
