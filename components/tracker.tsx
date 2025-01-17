@@ -17,9 +17,17 @@ export default function Tracker() {
   }
 
   const removeParticipant = (index: number) => {
-    setParticipants(participants.filter((_, i) => i !== index))
-    if (activeIndex >= participants.length - 1 && activeIndex > 0) {
-      setActiveIndex(activeIndex - 1)
+    if (index === 0) {
+      setParticipants(prev =>
+        prev.map((p, i) =>
+          i === 0 ? { initiative: "", name: "", hp: "", ac: "", group: "" } : p,
+        ),
+      )
+    } else {
+      setParticipants(prev => prev.filter((_, i) => i !== index))
+      if (activeIndex >= participants.length - 1 && activeIndex > 0) {
+        setActiveIndex(activeIndex - 1)
+      }
     }
   }
 
