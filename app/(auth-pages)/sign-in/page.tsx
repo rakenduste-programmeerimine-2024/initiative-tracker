@@ -24,7 +24,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
           </Label>
           <Input
             name="email"
-            placeholder="you@example.com"
+            placeholder="something@mail.com"
             required
             className="block w-full px-4 py-2 rounded-md bg-[#2c2c2e] text-[#f4f4f5] border border-[#3c3c3e]"
           />
