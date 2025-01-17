@@ -4,7 +4,7 @@ import { useState } from "react"
 
 export default function Tracker() {
   const [participants, setParticipants] = useState([
-    { initiative: "", name: "", hp: "", ac: "" },
+    { initiative: "", name: "", hp: "", ac: "", group: "" },
   ])
   const [round, setRound] = useState(1)
   const [activeIndex, setActiveIndex] = useState(0)
@@ -12,7 +12,7 @@ export default function Tracker() {
   const addParticipant = () => {
     setParticipants([
       ...participants,
-      { initiative: "", name: "", hp: "", ac: "" },
+      { initiative: "", name: "", hp: "", ac: "", group: "" },
     ])
   }
 
@@ -46,17 +46,15 @@ export default function Tracker() {
     setActiveIndex(prev => (prev + 1) % participants.length)
   }
 
-  // Define background color based on HP
   const getHpColor = (hp: string) => {
     const value = Number(hp)
-    if (value > 80) return "bg-[#4caf50]" // Roheline
-    if (value >= 40) return "bg-[#ffeb3b]" // Kollane
-    return "bg-[#f44336]" // Punane
+    if (value > 80) return "bg-[#4caf50]"
+    if (value >= 40) return "bg-[#ffeb3b]"
+    return "bg-[#f44336]"
   }
 
   return (
     <div className="p-6 bg-[#1c1c1e] rounded-md shadow-md">
-      {/* Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full table-auto text-[#f4f4f5]">
           <thead>
@@ -65,6 +63,7 @@ export default function Tracker() {
               <th className="p-2 border-b border-[#2c2c2e]">Name</th>
               <th className="p-2 border-b border-[#2c2c2e]">HP</th>
               <th className="p-2 border-b border-[#2c2c2e]">AC</th>
+              <th className="p-2 border-b border-[#2c2c2e]">Group</th>
             </tr>
           </thead>
           <tbody>
@@ -136,6 +135,20 @@ export default function Tracker() {
                   />
                 </td>
                 <td className="p-2 border-b border-[#2c2c2e]">
+                  <input
+                    type="text"
+                    value={participant.group}
+                    onChange={e =>
+                      setParticipants(prev =>
+                        prev.map((p, i) =>
+                          i === index ? { ...p, group: e.target.value } : p,
+                        ),
+                      )
+                    }
+                    className="bg-[#2c2c2e] text-[#f4f4f5] rounded p-1 w-full"
+                  />
+                </td>
+                <td className="p-2 border-b border-[#2c2c2e]">
                   <button
                     onClick={() => removeParticipant(index)}
                     className="text-[#e63946] hover:text-[#f77f85] px-2 py-1 rounded"
@@ -149,7 +162,6 @@ export default function Tracker() {
         </table>
       </div>
 
-      {/* Controls */}
       <div className="flex justify-between items-center mt-4">
         <div className="space-x-2">
           <button
