@@ -1,4 +1,5 @@
-import { signToken } from "./sign"
+import * as jose from "jose"
+import { signToken } from "./sign-token"
 
 /**
  * Refresh a JWT token.
@@ -6,7 +7,10 @@ import { signToken } from "./sign"
  * @param expiresIn - Token expiration time for the new token (default: "1h").
  * @returns The refreshed JWT token.
  */
-export function refreshToken(payload: object, expiresIn = "1h"): string {
+export async function refreshToken(
+  payload: jose.JWTPayload,
+  expiresIn = "1h",
+): Promise<string> {
   // Generate a new token with the same payload but updated expiration.
-  return signToken(payload, expiresIn)
+  return await signToken(payload, expiresIn)
 }

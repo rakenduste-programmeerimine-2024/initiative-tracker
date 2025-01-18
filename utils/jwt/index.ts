@@ -1,3 +1,3 @@
-export { signToken } from "./sign"
-export { verifyToken } from "./verify"
-export { refreshToken } from "./refresh"
+export { signToken } from "./sign-token"
+export { verifyToken } from "./verify-token"
+export { refreshToken } from "./refresh-token"
