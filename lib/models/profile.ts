@@ -14,6 +14,8 @@ export type Profile = {
   updated_at: Date
 }
 
+export type ProfileDTO = Profile & {}
+
 export const ProfileUtils = {
   validate(data: Partial<Profile>): void {
     if (!data.id) {

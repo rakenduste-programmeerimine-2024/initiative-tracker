@@ -5,6 +5,8 @@ export type Encounter = Entity & {
   name: string | null
 }
 
+export type EncounterDTO = Encounter & {}
+
 export const EncounterUtils = {
   validate(data: Partial<Encounter>): void {
     EntityUtils.validate(data)
