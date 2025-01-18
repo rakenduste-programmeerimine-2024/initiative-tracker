@@ -1,7 +1,10 @@
 import { getAuthToken } from "@/utils/api/token-utils"
 
-export async function fetchMultipleResources<T>(url: string): Promise<T[]> {
+export async function fetchMultipleResources<T>(
+  url: string,
+): Promise<{ success: boolean; data: T[] }> {
   const token = await getAuthToken()
+
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -17,20 +20,20 @@ export async function fetchMultipleResources<T>(url: string): Promise<T[]> {
 }
 
 export async function fetchByForeignKey<T>(
-  url: string,
+  baseUrl: string,
   foreignKey: string,
   value: string,
-): Promise<T[]> {
-  const query = new URLSearchParams({ [foreignKey]: value }).toString()
-  const fullUrl = `${url}?${query}`
+): Promise<{ success: boolean; data: T[] }> {
+  const fullUrl =
+    foreignKey === "path"
+      ? `${baseUrl}/${value}`
+      : `${baseUrl}?${new URLSearchParams({ [foreignKey]: value }).toString()}`
 
   return fetchMultipleResources<T>(fullUrl)
 }
 
 export async function fetchResource<T>(url: string): Promise<T> {
   const token = await getAuthToken()
-  console.log(token)
-  console.log(url)
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -47,6 +50,7 @@ export async function fetchResource<T>(url: string): Promise<T> {
 
 export async function createResource<T, U>(url: string, data: U): Promise<T> {
   const token = await getAuthToken()
+
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -83,6 +87,7 @@ export async function updateResource<T, U>(url: string, data: U): Promise<T> {
 
 export async function deleteResource(url: string): Promise<void> {
   const token = await getAuthToken()
+
   const response = await fetch(url, {
     method: "DELETE",
     headers: {

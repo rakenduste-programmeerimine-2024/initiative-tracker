@@ -1,40 +1,53 @@
-import { getUserIdFromRequest } from "@/middleware"
-import { createErrorResponse } from "./error-response"
+import {
+  fetchUserId,
+  getBaseUrl,
+  getUserIdFromRequest,
+} from "@/utils/api/request-utils"
+import { createErrorResponse } from "@/utils/api/error-response"
 import { NextRequest, NextResponse } from "next/server"
 
-/**
- * Validates that the request contains a valid user token.
- * @param req - The incoming request.
- * @returns User ID if valid, or an error response if invalid.
- */
-export async function validateUserToken(
-  req: Request | NextRequest,
-): Promise<string | NextResponse> {
-  const userId = await getUserIdFromRequest(req)
-  if (!userId) {
-    return createErrorResponse("Unauthorized", 401)
-  }
-  return userId
+function getResourceTypeFromPath(path: string): string | null {
+  const pathname = new URL(path).pathname
+  const parts = pathname.split("/")
+  const resourceType = parts[2] // Assuming the path is like '/api/resource-type/{id}'
+  return resourceType || null
 }
 
-/**
- * Validates that the request contains a valid user token.
- * @param req - The incoming request.
- * @param expectedUserId - The expected user ID.
- * @returns The user ID if valid, or an error response if invalid.
- */
 export async function validateRequest(
-  req: Request,
-  expectedUserId: string,
+  request: NextRequest,
+  requiresAuth: boolean = true,
+  resourceId: string | null = null,
 ): Promise<string | NextResponse> {
-  const userId = await getUserIdFromRequest(req as any);
+  const userId = await getUserIdFromRequest(request)
+
+  // Handle anonymous access if authentication is not required
   if (!userId) {
-    return createErrorResponse("Unauthorized", 401);
+    if (requiresAuth) {
+      return createErrorResponse("Unauthorized", 401) // Authentication required
+    }
+    return NextResponse.next() // Allow anonymous access for read-only actions
   }
 
-  if (userId !== expectedUserId) {
-    return createErrorResponse("Forbidden", 403);
+  // Enforce user ID check for authenticated actions
+  if (resourceId) {
+    const resourceType = getResourceTypeFromPath(request.url)
+    if (!resourceType) {
+      return createErrorResponse("Resource type not found", 404)
+    }
+
+    let expectedUserId: string | null = null
+
+    if (resourceType === "profiles") {
+      expectedUserId = resourceId
+    } else {
+      let baseUrl = await getBaseUrl(request)
+      expectedUserId = await fetchUserId(baseUrl, resourceId, resourceType)
+    }
+
+    if (expectedUserId && userId !== expectedUserId) {
+      return createErrorResponse("Forbidden", 403) // Forbidden if user IDs don't match
+    }
   }
 
-  return userId;
+  return userId // Return valid user ID
 }

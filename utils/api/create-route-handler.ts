@@ -5,6 +5,7 @@ type HandlerFunction = (id: string | null, req: NextRequest) => Promise<any>
 
 export function createRouteHandler(
   handler: HandlerFunction,
+  requiresAuth: boolean = true,
   requiresId: boolean = true,
 ): (
   req: NextRequest,
@@ -20,7 +21,11 @@ export function createRouteHandler(
       )
     }
 
-    const userIdOrError = await validateRequest(req, id || "")
+    // Skip user validation for read actions (when requiresAuth is false)
+    const userIdOrError = requiresAuth
+      ? await validateRequest(req, true, id || null)
+      : null
+
     if (userIdOrError instanceof NextResponse) {
       return userIdOrError
     }
