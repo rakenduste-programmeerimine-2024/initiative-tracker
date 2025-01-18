@@ -12,6 +12,8 @@ export type CombatLog = Entity & {
   death_save_failures: number // Ranges from -1 (default) to 3
 }
 
+export type CombatLogDTO = CombatLog & {}
+
 export const CombatLogUtils = {
   validate(data: Partial<CombatLog>): void {
     EntityUtils.validate(data)

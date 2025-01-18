@@ -12,6 +12,8 @@ export type StatBlock = Entity & {
   speed: number
 }
 
+export type StatBlockDTO = StatBlock & {}
+
 export const StatBlockUtils = {
   validate(data: Partial<StatBlock>): void {
     EntityUtils.validate(data)

@@ -5,6 +5,7 @@ const nextConfig = {
     JWT_SECRET: process.env.JWT_SECRET, // Exposes environment variables to the app
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    NEXT_PUBLIC_IS_PRODUCTION: process.env.NEXT_PUBLIC_IS_PRODUCTION,
   },
   images: {
     remotePatterns: [

@@ -6,7 +6,7 @@ import {
 export const DEFAULT_ENTITY = {
   is_public: false,
   created_at: new Date(),
-  updated_at: null,
+  modified_at: null,
   deleted_at: null,
 }
 

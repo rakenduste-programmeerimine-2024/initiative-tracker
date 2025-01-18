@@ -159,13 +159,13 @@ CREATE POLICY "Enable insert for users based on user_id" ON "public"."participan
 
 CREATE POLICY "Enable insert for users based on user_id" ON "public"."stat_blocks" FOR INSERT TO "authenticated" WITH CHECK ((( SELECT "auth"."uid"() AS "uid") = "user_id"));
 
-CREATE POLICY "Enable read access for all users" ON "public"."combat_logs" FOR SELECT USING (true);
+CREATE POLICY "Enable read access for authenticated or anonymous users" ON "public"."combat_logs" FOR SELECT TO "anon", "authenticated" USING (true);
 
-CREATE POLICY "Enable read access for all users" ON "public"."encounters" FOR SELECT USING (true);
+CREATE POLICY "Enable read access for authenticated or anonymous users" ON "public"."encounters" FOR SELECT TO "anon", "authenticated" USING (true);
 
-CREATE POLICY "Enable read access for all users" ON "public"."participants" FOR SELECT USING (true);
+CREATE POLICY "Enable read access for authenticated or anonymous users" ON "public"."participants" FOR SELECT TO "anon", "authenticated" USING (true);
 
-CREATE POLICY "Enable read access for all users" ON "public"."stat_blocks" FOR SELECT USING (true);
+CREATE POLICY "Enable read access for authenticated or anonymous users" ON "public"."stat_blocks" FOR SELECT TO "anon", "authenticated" USING (true);
 
 CREATE POLICY "Enable update for users based on user_id" ON "public"."combat_logs" FOR UPDATE TO "authenticated" USING ((( SELECT "auth"."uid"() AS "uid") = "user_id")) WITH CHECK ((( SELECT "auth"."uid"() AS "uid") = "user_id"));
 

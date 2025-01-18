@@ -1,22 +1,39 @@
 import { createRouteHandler } from "@/utils/api/create-route-handler"
-import { getCurrentUserId } from "@/utils/api/user-utils"
+import { getUserIdOrError } from "@/utils/api/request-utils"
+import { NextResponse } from "next/server"
 import EncounterService from "@/lib/services/encounter-service"
 
 // GET all encounters for a specific user
-export const GET = createRouteHandler(async (_, req) => {
-  const userId = await getCurrentUserId(req)
-  const encounters = await EncounterService.getByUserId(
-    "user_id",
-    userId,
-    userId,
-  )
-  return encounters
-}, false) // `requiresId` is false since we're not dealing with a single record
+export const GET = createRouteHandler(
+  async (_, req) => {
+    const userIdOrError = await getUserIdOrError(req)
+    if (userIdOrError instanceof NextResponse) {
+      return userIdOrError
+    }
+
+    const encounters = await EncounterService.getByUserId(
+      "user_id",
+      userIdOrError,
+      userIdOrError,
+    )
+    return encounters
+  },
+  false,
+  false,
+)
 
 // CREATE a new encounter
-export const POST = createRouteHandler(async (_, req) => {
-  const userId = await getCurrentUserId(req)
-  const data = await req!.json()
-  const newEncounter = await EncounterService.create(data, userId)
-  return newEncounter
-}, false)
+export const POST = createRouteHandler(
+  async (_, req) => {
+    const userIdOrError = await getUserIdOrError(req)
+    if (userIdOrError instanceof NextResponse) {
+      return userIdOrError
+    }
+
+    const data = await req!.json()
+    const newEncounter = await EncounterService.create(data, userIdOrError)
+    return newEncounter
+  },
+  true,
+  false,
+)

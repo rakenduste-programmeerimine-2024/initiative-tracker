@@ -1,5 +1,6 @@
 import { createRouteHandler } from "@/utils/api/create-route-handler"
-import { getCurrentUserId } from "@/utils/api/user-utils"
+import { getUserIdOrError } from "@/utils/api/request-utils"
+import { NextResponse } from "next/server"
 import { getProfile, updateProfile } from "@/lib/services/profile-service"
 
 export const GET = createRouteHandler(async (id, req) => {

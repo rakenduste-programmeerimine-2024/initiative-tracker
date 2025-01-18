@@ -72,7 +72,7 @@ export function createEntityService<T extends Entity>(tableName: TableName) {
       const query = supabase
         .from(tableName)
         .select("*")
-        .eq("user_id", currentUserId)
+        .or(`user_id.eq.${currentUserId},is_public.eq.true`)
         .is("deleted_at", null)
 
       // TODO: Consider adding pagination
@@ -88,6 +88,27 @@ export function createEntityService<T extends Entity>(tableName: TableName) {
       return { success: true, data: data.map(convertTimestamps) }
     },
 
+    // Fetch a single record's owner id by record's id
+    async getUserId(id: string): Promise<string | null> {
+      const supabase = await getSupabaseClient()
+
+      const query = supabase
+        .from(tableName)
+        .select("user_id")
+        .eq("id", id)
+        .single()
+
+      const { data, error } = await query
+
+      if (error) {
+        throw new Error(
+          `Error fetching record owner ID with record ID=${id} from ${tableName}: ${error.message}`,
+        )
+      }
+
+      return data?.user_id || null // Return the user_id if found, else null
+    },
+
     // Create a single record
     async create(
       entity: Partial<T>,
@@ -100,7 +121,7 @@ export function createEntityService<T extends Entity>(tableName: TableName) {
       const recordToInsert: Partial<T> = {
         ...allowedInserts,
         created_at: new Date().toISOString(),
-        updated_at: null,
+        modified_at: null,
         deleted_at: null,
         user_id: currentUserId,
       } as unknown as Partial<T>
@@ -135,7 +156,7 @@ export function createEntityService<T extends Entity>(tableName: TableName) {
 
       const recordToUpdate: Partial<T> = {
         ...allowedUpdates,
-        updated_at: new Date().toISOString(),
+        modified_at: new Date().toISOString(),
       } as unknown as Partial<T>
 
       const validate = getValidationFunction<T>(tableName)
@@ -166,6 +187,7 @@ export function createEntityService<T extends Entity>(tableName: TableName) {
       currentUserId: string,
     ): Promise<{ success: true; id: string }> {
       const supabase = await getSupabaseClient()
+      
       const query = supabase
         .from(tableName)
         .update({ deleted_at: new Date().toISOString() })
@@ -191,6 +213,7 @@ export function createEntityService<T extends Entity>(tableName: TableName) {
       currentUserId: string,
     ): Promise<{ success: true; id: string }> {
       const supabase = await getSupabaseClient()
+
       const query = supabase
         .from(tableName)
         .delete()

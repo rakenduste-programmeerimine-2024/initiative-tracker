@@ -9,10 +9,12 @@ export type Entity = {
   id: UUID
   is_public: boolean
   created_at: Date
-  updated_at: Date | null
+  modified_at: Date | null
   deleted_at: Date | null
   user_id: UUID
 }
+
+export type EntityDTO = Entity & {}
 
 export const EntityUtils: BaseEntity<Entity> = {
   validate(data: Partial<Entity>): void {

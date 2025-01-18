@@ -3,7 +3,6 @@ import { getSupabaseClient } from "@/utils/supabase/client-provider"
 import { NextResponse } from "next/server"
 
 export async function GET(req: Request) {
-  // Fetch the current user from Supabase (or your auth provider).
   const supabase = await getSupabaseClient()
   const {
     data: { user },
@@ -13,7 +12,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  // Generate an access token.
+  // Generate an access token
   const accessToken = signToken({
     id: user.id,
     email: user.email,
@@ -23,5 +22,13 @@ export async function GET(req: Request) {
   // Optionally, generate a refresh token
   const refreshToken = signToken({ id: user.id }, "7d") // Expires in 7 days
 
-  return NextResponse.json({ accessToken, refreshToken })
+  let session = null
+  let dataToken = null
+  const { data, error } = await supabase.auth.getSession()
+  if (data) {
+    session = data.session?.access_token
+    dataToken = signToken({})
+  }
+
+  return NextResponse.json({ accessToken, refreshToken, dataToken })
 }

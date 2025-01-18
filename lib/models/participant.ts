@@ -18,6 +18,8 @@ export type Participant = Entity & {
   status: ParticipantStatus
 }
 
+export type ParticipantDTO = Participant & {}
+
 export const ParticipantUtils = {
   validate(data: Partial<Participant>): void {
     EntityUtils.validate(data)

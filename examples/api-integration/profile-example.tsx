@@ -12,7 +12,7 @@ type Profile = {
   avatar_url: string | null
 }
 
-export default function ProfileDetails({ user }: { user: User | null }) {
+export default function ProfileExample({ user }: { user: User | null }) {
   const [loading, setLoading] = useState(true)
   const [fullname, setFullname] = useState<string | null>(null)
   const [username, setUsername] = useState<string | null>(null)
