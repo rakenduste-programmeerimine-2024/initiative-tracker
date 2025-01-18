@@ -1,9 +1,9 @@
 import { createRouteHandler } from "@/utils/api/create-route-handler"
 import { getUserIdOrError } from "@/utils/api/request-utils"
 import { NextResponse } from "next/server"
-import EncounterService from "@/lib/services/encounter-service"
+import StatBlockService from "@/lib/services/stat-block-service"
 
-// GET all encounters for a specific user
+// GET all stat blocks for a specific user
 export const GET = createRouteHandler(
   async (_, req) => {
     const userIdOrError = await getUserIdOrError(req)
@@ -11,18 +11,18 @@ export const GET = createRouteHandler(
       return userIdOrError
     }
 
-    const encounters = await EncounterService.getByUserId(
+    const statBlocks = await StatBlockService.getByUserId(
       "user_id",
       userIdOrError,
       userIdOrError,
     )
-    return encounters
+    return statBlocks
   },
   false,
   false,
 )
 
-// CREATE a new encounter
+// CREATE a new stat block
 export const POST = createRouteHandler(
   async (_, req) => {
     const userIdOrError = await getUserIdOrError(req)
@@ -31,8 +31,8 @@ export const POST = createRouteHandler(
     }
 
     const data = await req!.json()
-    const newEncounter = await EncounterService.create(data, userIdOrError)
-    return newEncounter
+    const newStatBlock = await StatBlockService.create(data, userIdOrError)
+    return newStatBlock
   },
   true,
   false,

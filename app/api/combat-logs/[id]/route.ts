@@ -1,20 +1,20 @@
 import { createRouteHandler } from "@/utils/api/create-route-handler"
 import { getUserIdOrError } from "@/utils/api/request-utils"
 import { NextResponse } from "next/server"
-import EncounterService from "@/lib/services/encounter-service"
+import CombatLogService from "@/lib/services/combat-log-service"
 
-// GET a single encounter by ID
+// GET a single combat log by ID
 export const GET = createRouteHandler(async (id, req) => {
   const userIdOrError = await getUserIdOrError(req)
   if (userIdOrError instanceof NextResponse) {
     return userIdOrError
   }
 
-  const encounter = await EncounterService.get(id!, userIdOrError)
-  return encounter
+  const combatLog = await CombatLogService.get(id!, userIdOrError)
+  return combatLog
 }, false)
 
-// UPDATE a single encounter by ID
+// UPDATE a single combat log by ID
 export const PUT = createRouteHandler(async (id, req) => {
   const userIdOrError = await getUserIdOrError(req)
   if (userIdOrError instanceof NextResponse) {
@@ -22,21 +22,21 @@ export const PUT = createRouteHandler(async (id, req) => {
   }
 
   const updates = await req!.json()
-  const updatedEncounter = await EncounterService.update(
+  const updatedCombatLog = await CombatLogService.update(
     id!,
     updates,
     userIdOrError,
   )
-  return updatedEncounter
+  return updatedCombatLog
 })
 
-// SOFT DELETE a single encounter by ID
+// SOFT DELETE a single combat log by ID
 export const DELETE = createRouteHandler(async (id, req) => {
   const userIdOrError = await getUserIdOrError(req)
   if (userIdOrError instanceof NextResponse) {
     return userIdOrError
   }
 
-  const deletedEncounter = await EncounterService.softDelete(id!, userIdOrError)
-  return deletedEncounter
+  const deletedCombatLog = await CombatLogService.softDelete(id!, userIdOrError)
+  return deletedCombatLog
 })
