@@ -9,10 +9,10 @@ const ThreeScene: React.FC = () => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
       const renderer = new THREE.WebGLRenderer({ alpha: true });
 
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(200, 200);
       containerRef.current?.appendChild(renderer.domElement);
 
       const loader = new THREE.TextureLoader();
@@ -29,7 +29,7 @@ const ThreeScene: React.FC = () => {
       const cube = new THREE.Mesh(geometry, materials);
       scene.add(cube);
 
-      camera.position.z = 5;
+      camera.position.z = 2;
 
       const renderScene = () => {
         cube.rotation.x += 0.01;
@@ -39,8 +39,8 @@ const ThreeScene: React.FC = () => {
       };
 
       const handleResize = () => {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
+        const width = 200;
+        const height = 200;
 
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
