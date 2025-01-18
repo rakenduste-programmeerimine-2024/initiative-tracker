@@ -16,8 +16,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const isProduction = process.env.NEXT_PUBLIC_IS_PRODUCTION === "true"
+
   return (
-    <html lang="en" className={GeistSans.className} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={GeistSans.className}
+      suppressHydrationWarning
+    >
       <body className="bg-background text-foreground">
         <ThemeProvider
           attribute="class"
@@ -41,15 +47,34 @@ export default function RootLayout({
                     />
                   </Link>
                   <div className="flex items-center gap-4">
-                    <Link href="/tracker" className="text-sm text-red-500 hover:underline">
+                    <Link
+                      href="/tracker"
+                      className="text-sm text-red-500 hover:underline"
+                    >
                       Tracker
                     </Link>
-                    <Link href="/participants" className="text-sm text-red-500 hover:underline">
+                    <Link
+                      href="/participants"
+                      className="text-sm text-red-500 hover:underline"
+                    >
                       Participants
                     </Link>
-                    <Link href="/demov2" className="text-sm text-red-500 hover:underline">
-                      DemoV2
-                    </Link>
+                    {!isProduction && (
+                      <>
+                        <Link
+                          href="/demov2"
+                          className="text-sm text-red-500 hover:underline"
+                        >
+                          DemoV2
+                        </Link>
+                        <Link
+                          href="/dev/api-example"
+                          className="text-sm text-red-500 hover:underline"
+                        >
+                          API Examples
+                        </Link>
+                      </>
+                    )}
                     <HeaderAuth />
                     <ThemeSwitcher />
                   </div>
@@ -70,5 +95,5 @@ export default function RootLayout({
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }
