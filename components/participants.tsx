@@ -9,6 +9,7 @@ export default function Participants() {
   ])
   const [loading, setLoading] = useState(true)
   const [notification, setNotification] = useState<string | null>(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   const supabase = createClient()
 
@@ -87,7 +88,6 @@ export default function Participants() {
     try {
       const user = await supabase.auth.getUser()
       if (!user?.data?.user) {
-        console.error("User not logged in!")
         return
       }
 
@@ -123,6 +123,12 @@ export default function Participants() {
   }
 
   useEffect(() => {
+    const checkLoginStatus = async () => {
+      const user = await supabase.auth.getUser()
+      setIsLoggedIn(!!user?.data?.user)
+    }
+
+    checkLoginStatus()
     loadParticipants()
   }, [])
 
@@ -232,12 +238,14 @@ export default function Participants() {
             >
               Add Participant
             </button>
-            <button
-              onClick={saveParticipants}
-              className="px-4 py-2 bg-[#6a040f] text-white rounded hover:bg-[#9d0208]"
-            >
-              Save Participants
-            </button>
+            {isLoggedIn && (
+              <button
+                onClick={saveParticipants}
+                className="px-4 py-2 bg-[#6a040f] text-white rounded hover:bg-[#9d0208]"
+              >
+                Save Participants
+              </button>
+            )}
           </div>
         </>
       )}
