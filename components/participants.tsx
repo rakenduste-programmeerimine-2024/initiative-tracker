@@ -143,6 +143,13 @@ export default function Participants() {
               {notification}
             </div>
           )}
+          
+          {!isLoggedIn && (
+            <div className="mb-4 bg-[#6a040f] text-white p-3 rounded">
+              Log in to save your participants list.
+            </div>
+          )}
+
           <div className="overflow-x-auto">
             <table className="min-w-full table-auto text-[#f4f4f5]">
               <thead>
