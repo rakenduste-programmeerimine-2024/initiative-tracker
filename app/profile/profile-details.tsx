@@ -25,14 +25,13 @@ export default function ProfileDetails({ user }: { user: User | null }) {
         .eq("id", user?.id)
         .single();
 
-      if (error) {
-        throw error;
-      }
-
-      if (data) {
-        setFullname(data.full_name);
-        setUsername(data.username);
-        setAvatarUrl(data.avatar_url);
+      if (error && error.code === "PGRST116") {
+        console.log("Profile doesn't exist yet.")
+        return
+      } else if (data) {
+        setFullname(data.full_name)
+        setUsername(data.username)
+        setAvatarUrl(data.avatar_url)
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
