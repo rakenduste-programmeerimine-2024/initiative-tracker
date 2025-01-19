@@ -59,22 +59,18 @@ export default function RootLayout({
                     >
                       Participants
                     </Link>
-                    {!isProduction && (
-                      <>
-                        <Link
-                          href="/demov2"
-                          className="text-sm text-red-500 hover:underline"
-                        >
-                          DemoV2
-                        </Link>
-                        <Link
-                          href="/dev/api-example"
-                          className="text-sm text-red-500 hover:underline"
-                        >
-                          API Examples
-                        </Link>
-                      </>
-                    )}
+                    <Link
+                      href="/demov2"
+                      className="text-sm text-red-500 hover:underline"
+                    >
+                      DemoV2
+                    </Link>
+                    <Link
+                      href="/dev/api-example"
+                      className="text-sm text-red-500 hover:underline"
+                    >
+                      API Examples
+                    </Link>
                     <HeaderAuth />
                     <ThemeSwitcher />
                   </div>
