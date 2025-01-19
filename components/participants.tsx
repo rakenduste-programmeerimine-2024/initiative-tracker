@@ -8,6 +8,7 @@ export default function Participants() {
     { name: "", dexterity: 10, dexModifier: 0, hp: 0, ac: 10 },
   ])
   const [loading, setLoading] = useState(true)
+  const [notification, setNotification] = useState<string | null>(null)
 
   const supabase = createClient()
 
@@ -74,6 +75,8 @@ export default function Participants() {
         return
       }
 
+      setNotification("Participants list saved successfully.")
+      setTimeout(() => setNotification(null), 3000)
       console.log("Participants saved successfully:", data)
     } catch (error) {
       console.error("An unexpected error occurred:", error)
@@ -129,6 +132,11 @@ export default function Participants() {
         <p className="text-[#f4f4f5]">Loading participants...</p>
       ) : (
         <>
+          {notification && (
+            <div className="mb-4 bg-[#6a040f] text-white p-3 rounded">
+              {notification}
+            </div>
+          )}
           <div className="overflow-x-auto">
             <table className="min-w-full table-auto text-[#f4f4f5]">
               <thead>
