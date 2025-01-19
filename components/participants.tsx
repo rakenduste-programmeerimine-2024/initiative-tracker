@@ -1,11 +1,14 @@
 "use client"
 
+import { createClient } from "@/utils/supabase/client"
 import { useState } from "react"
 
 export default function Participants() {
   const [participants, setParticipants] = useState([
     { name: "", dexterity: 10, dexModifier: 0, hp: 0, ac: 10 },
   ])
+
+  const supabase = createClient()
 
   const calculateDexModifier = (dexterity: number) =>
     Math.floor((dexterity - 10) / 2)
@@ -31,8 +34,39 @@ export default function Participants() {
     }
   }
 
-  const saveParticipants = () => {
-    console.log("Saving participants:", participants) // vaja andmebaasiga ühendada
+  const saveParticipants = async () => {
+    try {
+      const user = await supabase.auth.getUser()
+      if (!user?.data?.user) {
+        console.error("User not logged in!")
+        return
+      }
+
+      const userId = user.data.user.id
+
+      const dataToSave = participants.map(participant => ({
+        name: participant.name || "Unnamed",
+        rolled_initiative: participant.dexModifier, //tracker lehel oleks vaja teha, nii et rolli väärtus liidetakse sellele otsa
+        hit_points_max: participant.hp || 0,
+        status: "Alive",
+        is_public: false,
+        user_id: userId,
+        type: "Player",
+      }))
+
+      const { data, error } = await supabase
+        .from("participants")
+        .insert(dataToSave)
+
+      if (error) {
+        console.error("Error saving participants:", error.message)
+        return
+      }
+
+      console.log("Participants saved successfully:", data)
+    } catch (error) {
+      console.error("An unexpected error occurred:", error)
+    }
   }
 
   return (
