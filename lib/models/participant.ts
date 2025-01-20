@@ -4,6 +4,11 @@ import {
   ParticipantStatus,
   ParticipantType,
 } from "@/types/enums/participant-enums"
+import {
+  calculateActiveArmorClass,
+  calculateInitiative,
+  calculateModifier,
+} from "@/utils/entities/participant-utils"
 
 type UUID = string
 
@@ -18,7 +23,11 @@ export type Participant = Entity & {
   status: ParticipantStatus
 }
 
-export type ParticipantDTO = Participant & {}
+export type ParticipantDTO = Participant & {
+  dexterity_modifier: number
+  final_initiative: number
+  active_armor_class: number
+}
 
 export const ParticipantUtils = {
   validate(data: Partial<Participant>): void {
@@ -64,6 +73,31 @@ export const ParticipantUtils = {
       ...DEFAULT_PARTICIPANT,
       ...baseEntity,
       ...data,
+    }
+  },
+
+  mapToDTO(
+    participant: Participant,
+    statBlock: {
+      dexterity_score: number
+      base_armor_class: number
+      dex_applies_to_ac: boolean
+    },
+  ): ParticipantDTO {
+    const dexterityModifier = calculateModifier(statBlock.dexterity_score)
+
+    return {
+      ...participant,
+      dexterity_modifier: dexterityModifier,
+      final_initiative: calculateInitiative(
+        participant.rolled_initiative,
+        dexterityModifier,
+      ),
+      active_armor_class: calculateActiveArmorClass(
+        statBlock.base_armor_class,
+        dexterityModifier,
+        statBlock.dex_applies_to_ac,
+      ),
     }
   },
 }

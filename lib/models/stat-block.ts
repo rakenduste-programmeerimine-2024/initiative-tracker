@@ -1,6 +1,7 @@
 import { DEFAULT_STAT_BLOCK } from "@/lib/constants/default-values"
 import { HIT_POINTS_FORMULA_REGEX } from "@/utils/entities/validation-patterns"
 import { Entity, EntityUtils } from "./entity"
+import { calculateModifier } from "@/utils/entities/participant-utils"
 
 export type StatBlock = Entity & {
   name: string | null
@@ -12,7 +13,9 @@ export type StatBlock = Entity & {
   speed: number
 }
 
-export type StatBlockDTO = StatBlock & {}
+export type StatBlockDTO = StatBlock & {
+  dexterity_modifier: number
+}
 
 export const StatBlockUtils = {
   validate(data: Partial<StatBlock>): void {
@@ -72,6 +75,15 @@ export const StatBlockUtils = {
       ...DEFAULT_STAT_BLOCK,
       ...baseEntity,
       ...data,
+    }
+  },
+
+  mapToDTO(statBlock: StatBlock): StatBlockDTO {
+    const dexterityModifier = calculateModifier(statBlock.dexterity_score)
+
+    return {
+      ...statBlock,
+      dexterity_modifier: dexterityModifier,
     }
   },
 }

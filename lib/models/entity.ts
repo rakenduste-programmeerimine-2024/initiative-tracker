@@ -33,4 +33,10 @@ export const EntityUtils: BaseEntity<Entity> = {
       ...data,
     }
   },
+
+  mapToDTO(entity: Entity): EntityDTO {
+    return {
+      ...entity,
+    }
+  },
 }

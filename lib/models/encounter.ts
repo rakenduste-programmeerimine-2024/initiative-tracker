@@ -27,4 +27,10 @@ export const EncounterUtils = {
       ...data,
     }
   },
+
+  mapToDTO(encounter: Encounter): EncounterDTO {
+    return {
+      ...encounter,
+    }
+  },
 }

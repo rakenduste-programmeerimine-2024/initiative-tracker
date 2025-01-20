@@ -1,5 +1,6 @@
 import { DEFAULT_COMBAT_LOG } from "@/lib/constants/default-values"
 import { Entity, EntityUtils } from "./entity"
+import { calculateHealthPercentage } from "@/utils/entities/combat-log-utils"
 
 type UUID = string
 
@@ -12,7 +13,9 @@ export type CombatLog = Entity & {
   death_save_failures: number // Ranges from -1 (default) to 3
 }
 
-export type CombatLogDTO = CombatLog & {}
+export type CombatLogDTO = CombatLog & {
+  health_percentage: number | null
+}
 
 export const CombatLogUtils = {
   validate(data: Partial<CombatLog>): void {
@@ -58,6 +61,18 @@ export const CombatLogUtils = {
       ...DEFAULT_COMBAT_LOG,
       ...baseEntity,
       ...data,
+    }
+  },
+
+  mapToDTO(combatLog: CombatLog): CombatLogDTO {
+    const healthPercentage = calculateHealthPercentage(
+      combatLog.hit_points_current,
+      combatLog.hit_points_current > 0 ? combatLog.hit_points_current : null,
+    )
+
+    return {
+      ...combatLog,
+      health_percentage: healthPercentage,
     }
   },
 }
