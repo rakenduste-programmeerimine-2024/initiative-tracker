@@ -16,10 +16,12 @@ type ParticipantState = {
   selected: boolean
 }
 
-export default function Tracker() {
-  const searchParams = useSearchParams()
-  const encounterId = searchParams.get("encounterId")
 
+export default function Tracker({
+  encounterId,
+}: {
+  encounterId: string | null
+}) {
   const [participants, setParticipants] = useState<ParticipantState[]>([])
   const [round, setRound] = useState(1)
   const [activeIndex, setActiveIndex] = useState(0)
