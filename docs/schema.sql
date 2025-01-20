@@ -231,47 +231,45 @@ ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TAB
 
 RESET ALL;
 
-CREATE OR REPLACE FUNCTION get_last_combat_logs(encounter_id UUID, user_id UUID)
+-- DROP FUNCTION get_last_combat_logs(uuid,uuid)
+
+CREATE OR REPLACE FUNCTION get_last_combat_logs(
+    encounter_id UUID,
+    user_id UUID
+)
 RETURNS TABLE (
-  participant_id UUID,
-  name TEXT,
-  rolled_initiative INTEGER,
-  round_no INTEGER,
-  hit_points_current INTEGER,
-  death_save_successes INTEGER,
-  death_save_failures INTEGER,
-  hit_points_max INTEGER,
-  dexterity_score INTEGER,
-  base_armor_class INTEGER,
-  dex_applies_to_ac BOOLEAN
+    participant_id UUID,
+    name TEXT,
+    rolled_initiative SMALLINT,
+    round_no SMALLINT,
+    hit_points_current SMALLINT,
+    death_save_successes SMALLINT,
+    death_save_failures SMALLINT,
+    hit_points_max SMALLINT
 ) AS $$
 BEGIN
-  RETURN QUERY
-  SELECT
-    p.id AS participant_id,
-    p.name,
-    p.rolled_initiative,
-    cl.round_no,
-    cl.hit_points_current,
-    cl.death_save_successes,
-    cl.death_save_failures,
-    p.hit_points_max,
-    sb.dexterity_score,
-    sb.base_armor_class,
-    sb.dex_applies_to_ac
-  FROM participants p
-  LEFT JOIN LATERAL (
-    SELECT *
-    FROM combat_logs cl
-    WHERE cl.participant_id = p.id
-    ORDER BY cl.round_no DESC
-    LIMIT 1
-  ) cl ON true
-  LEFT JOIN stat_blocks sb ON p.stat_block_id = sb.id
-  WHERE p.encounter_id = encounter_id
-    AND p.user_id = user_id
-    AND p.deleted_at IS NULL
-  ORDER BY p.rolled_initiative DESC;
+    RETURN QUERY
+    SELECT
+        p.id AS participant_id,
+        p.name,
+        p.rolled_initiative,
+        cl.round_no,
+        cl.hit_points_current,
+        cl.death_save_successes,
+        cl.death_save_failures,
+        p.hit_points_max
+    FROM participants p
+    LEFT JOIN LATERAL (
+        SELECT *
+        FROM combat_logs cl
+        WHERE cl.participant_id = p.id
+        ORDER BY cl.round_no DESC
+        LIMIT 1
+    ) cl ON true
+    WHERE p.encounter_id = $1
+    AND p.user_id = $2
+      AND p.deleted_at IS NULL
+    ORDER BY p.rolled_initiative DESC;
 END;
 $$ LANGUAGE plpgsql;
 
