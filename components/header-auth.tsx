@@ -5,10 +5,6 @@ import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
 import { type User } from "@supabase/supabase-js";
 
-          {/*Tracker page*/}
-          <Link href= "/tracker" className="text-sm text-red-500 hover:underline"> 
-            Tracker
-          </Link>
 export default function HeaderAuth() {
   const supabase = createClient();
   const [user, setUser] = useState<User | null>(null);

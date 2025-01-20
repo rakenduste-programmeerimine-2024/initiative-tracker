@@ -29,7 +29,7 @@ export const signUpAction = async (formData: FormData) => {
   } else {
     return encodedRedirect(
       "success",
-      "/sign-up",
+      "/sign-in",
       "Thanks for signing up! Please check your email for a verification link.",
     )
   }
@@ -49,7 +49,7 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", error.message)
   }
 
-  return redirect("/")
+  return redirect("/profile")
 }
 
 export const forgotPasswordAction = async (formData: FormData) => {
@@ -81,7 +81,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
 
   return encodedRedirect(
     "success",
-    "/forgot-password",
+    "/sign-in",
     "Check your email for a link to reset your password.",
   )
 }
@@ -120,7 +120,7 @@ export const resetPasswordAction = async (formData: FormData) => {
     )
   }
 
-  encodedRedirect("success", "/protected/reset-password", "Password updated")
+  encodedRedirect("success", "/profile", "Password updated")
 }
 
 export const signOutAction = async () => {
