@@ -1,23 +1,21 @@
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { GeistSans } from "geist/font/sans";
-import { ThemeProvider } from "next-themes";
-import Link from "next/link";
-import Image from "next/image";
-import "./globals.css";
-import HeaderAuth from "@/components/header-auth";
+import { ThemeSwitcher } from "@/components/theme-switcher"
+import { GeistSans } from "geist/font/sans"
+import { ThemeProvider } from "next-themes"
+import HeaderAuth from "@/components/header-auth"
+import Link from "next/link"
+import Image from "next/image"
+import "./globals.css"
 
 export const metadata = {
   title: "D&D Initiative Tracker",
   description: "Manage initiative and combat with ease.",
-};
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
-  const isProduction = process.env.NEXT_PUBLIC_IS_PRODUCTION === "true"
-
   return (
     <html
       lang="en"

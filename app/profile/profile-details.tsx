@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { type User } from "@supabase/supabase-js";
-import Avatar from "./avatar";
-import { useRouter } from "next/navigation";
+import { type User } from "@supabase/supabase-js"
+import { useRouter } from "next/navigation"
+import Avatar from "./avatar"
 
 export default function ProfileDetails({ user }: { user: User | null }) {
   const supabase = createClient();
