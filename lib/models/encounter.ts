@@ -1,11 +1,14 @@
 import { DEFAULT_ENCOUNTER } from "@/lib/constants/default-values"
 import { Entity, EntityUtils } from "./entity"
+import { ParticipantDTO } from "./participant"
 
 export type Encounter = Entity & {
   name: string | null
 }
 
-export type EncounterDTO = Encounter & {}
+export type EncounterDTO = Encounter & {
+  participants?: Partial<ParticipantDTO>[]
+}
 
 export const EncounterUtils = {
   validate(data: Partial<Encounter>): void {
@@ -25,6 +28,15 @@ export const EncounterUtils = {
       ...DEFAULT_ENCOUNTER,
       ...baseEntity,
       ...data,
+    }
+  },
+
+  mapToDTO(encounter: Encounter): EncounterDTO {
+    const baseDTO = EntityUtils.mapToDTO(encounter)
+
+    return {
+      ...baseDTO,
+      ...encounter,
     }
   },
 }

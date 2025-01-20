@@ -1,26 +1,31 @@
 import { DEFAULT_COMBAT_LOG } from "@/lib/constants/default-values"
 import { Entity, EntityUtils } from "./entity"
+import { calculateHealthPercentage } from "@/utils/entities/combat-log-utils"
+import { ParticipantDTO } from "./participant"
 
 type UUID = string
 
 export type CombatLog = Entity & {
   encounter_id: UUID | null
   participant_id: UUID | null
-  turn_no: number
+  round_no: number
   hit_points_current: number
   death_save_successes: number // Ranges from -1 (default) to 3
   death_save_failures: number // Ranges from -1 (default) to 3
 }
 
-export type CombatLogDTO = CombatLog & {}
+export type CombatLogDTO = CombatLog & {
+  health_percentage: number | null
+  participant?: Partial<ParticipantDTO> | null
+}
 
 export const CombatLogUtils = {
   validate(data: Partial<CombatLog>): void {
     EntityUtils.validate(data)
 
-    if (data.turn_no !== undefined && data.turn_no < 1) {
+    if (data.round_no !== undefined && data.round_no < 1) {
       throw new Error(
-        `Invalid turn number (${data.turn_no}). Turn number must be 1 or higher.`,
+        `Invalid round number (${data.round_no}). Round number must be 1 or higher.`,
       )
     }
 
@@ -58,6 +63,21 @@ export const CombatLogUtils = {
       ...DEFAULT_COMBAT_LOG,
       ...baseEntity,
       ...data,
+    }
+  },
+
+  mapToDTO(combatLog: CombatLog): CombatLogDTO {
+    const baseDTO = EntityUtils.mapToDTO(combatLog)
+
+    const healthPercentage = calculateHealthPercentage(
+      combatLog.hit_points_current,
+      combatLog.hit_points_current > 0 ? combatLog.hit_points_current : null,
+    )
+
+    return {
+      ...baseDTO,
+      ...combatLog,
+      health_percentage: healthPercentage,
     }
   },
 }

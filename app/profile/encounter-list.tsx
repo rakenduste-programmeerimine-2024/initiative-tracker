@@ -2,45 +2,48 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation"
 
 interface Encounter {
-  id: string;
-  name: string;
-  created_at: string;
+  id: string
+  name: string
+  created_at: string
 }
 
 export default function EncounterList({ userId }: { userId: string }) {
-  const [encounters, setEncounters] = useState<Encounter[]>([]);
-  const [loading, setLoading] = useState(true);
+  const router = useRouter()
+
+  const [encounters, setEncounters] = useState<Encounter[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchEncounters = async () => {
-      const supabase = createClient();
+      const supabase = createClient()
       const { data, error } = await supabase
         .from("encounters")
         .select("id, name, created_at")
-        .eq("user_id", userId);
+        .eq("user_id", userId)
 
       if (error) {
-        console.error("Error fetching encounters:", error);
+        console.error("Error fetching encounters:", error)
       } else {
-        setEncounters(data || []);
+        setEncounters(data || [])
       }
 
-      setLoading(false);
-    };
+      setLoading(false)
+    }
 
-    fetchEncounters();
-  }, [userId]);
+    fetchEncounters()
+  }, [userId])
 
   if (loading) {
-    return <p className="text-center text-gray-500">Loading encounters...</p>;
+    return <p className="text-center text-gray-500">Loading encounters...</p>
   }
 
   if (encounters.length === 0) {
     return (
       <p className="text-center text-gray-500">No saved encounters found.</p>
-    );
+    )
   }
 
   return (
@@ -49,7 +52,7 @@ export default function EncounterList({ userId }: { userId: string }) {
         Saved Encounters
       </h2>
       <ul className="space-y-2">
-        {encounters.map((encounter) => (
+        {encounters.map(encounter => (
           <li
             key={encounter.id}
             className="p-4 bg-gray-800 rounded-md shadow-md"
@@ -60,12 +63,11 @@ export default function EncounterList({ userId }: { userId: string }) {
             <p className="text-sm text-gray-400">
               Saved on: {new Date(encounter.created_at).toLocaleString()}
             </p>
-            {/* Add logic to handle reopening */}
             <button
               className="mt-2 px-4 py-2 bg-[#2c2c2e] text-white rounded shadow hover:bg-[#3c3c3e]"
-              onClick={() => {
-                console.log(`Reopening encounter ID: ${encounter.id}`);
-              }}
+              onClick={() =>
+                router.push(`/tracker?encounterId=${encounter.id}`)
+              }
             >
               Reopen Encounter
             </button>
@@ -73,5 +75,5 @@ export default function EncounterList({ userId }: { userId: string }) {
         ))}
       </ul>
     </div>
-  );
+  )
 }

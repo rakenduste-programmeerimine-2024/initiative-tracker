@@ -76,12 +76,12 @@ export default function GenerateSampleData({ user }: { user: User | null }) {
   async function createCombatLog(
     encounterId: string,
     participantId: string,
-    turnNo: number,
+    roundNo: number,
   ): Promise<string> {
     const randomCombatLog = CombatLogUtils.create({
       encounter_id: encounterId,
       participant_id: participantId,
-      turn_no: turnNo,
+      round_no: roundNo,
       hit_points_current: Math.floor(Math.random() * 100),
       death_save_successes: -1, // Default value for no death saves
       death_save_failures: -1, // Default value for no death saves

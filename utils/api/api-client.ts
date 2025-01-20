@@ -1,22 +1,29 @@
 import { getAuthToken } from "@/utils/api/token-utils"
 
-export async function fetchMultipleResources<T>(
-  url: string,
-): Promise<{ success: boolean; data: T[] }> {
+async function request<T>(url: string, options: RequestInit = {}): Promise<T> {
   const token = await getAuthToken()
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+    ...options.headers,
+  }
 
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  })
+  const response = await fetch(url, { ...options, headers })
 
   if (!response.ok) {
-    throw new Error(`Error fetching resources: ${response.statusText}`)
+    const errorBody = await response.text()
+    throw new Error(
+      `Error: ${response.status} ${response.statusText} - ${errorBody}`,
+    )
   }
 
   return response.json()
+}
+
+export async function fetchMultipleResources<T>(
+  url: string,
+): Promise<{ success: boolean; data: T[] }> {
+  return await request<{ success: boolean; data: T[] }>(url)
 }
 
 export async function fetchByForeignKey<T>(
@@ -29,74 +36,27 @@ export async function fetchByForeignKey<T>(
       ? `${baseUrl}/${value}`
       : `${baseUrl}?${new URLSearchParams({ [foreignKey]: value }).toString()}`
 
-  return fetchMultipleResources<T>(fullUrl)
+  return await fetchMultipleResources<T>(fullUrl)
 }
 
 export async function fetchResource<T>(url: string): Promise<T> {
-  const token = await getAuthToken()
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  })
-
-  if (!response.ok) {
-    throw new Error(`Error fetching resource: ${response.statusText}`)
-  }
-
-  return response.json()
+  return await request<T>(url)
 }
 
 export async function createResource<T, U>(url: string, data: U): Promise<T> {
-  const token = await getAuthToken()
-
-  const response = await fetch(url, {
+  return await request<T>(url, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   })
-
-  if (!response.ok) {
-    throw new Error(`Error creating resource: ${response.statusText}`)
-  }
-
-  return response.json()
 }
 
 export async function updateResource<T, U>(url: string, data: U): Promise<T> {
-  const token = await getAuthToken()
-  const response = await fetch(url, {
+  return await request<T>(url, {
     method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   })
-
-  if (!response.ok) {
-    throw new Error(`Error updating resource: ${response.statusText}`)
-  }
-
-  return response.json()
 }
 
 export async function deleteResource(url: string): Promise<void> {
-  const token = await getAuthToken()
-
-  const response = await fetch(url, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  })
-
-  if (!response.ok) {
-    throw new Error(`Error deleting resource: ${response.statusText}`)
-  }
+  await request<void>(url, { method: "DELETE" })
 }

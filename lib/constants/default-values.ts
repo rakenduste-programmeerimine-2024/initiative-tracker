@@ -13,7 +13,7 @@ export const DEFAULT_ENTITY = {
 export const DEFAULT_COMBAT_LOG = {
   encounter_id: null,
   participant_id: null,
-  turn_no: 1,
+  round_no: 1,
   hit_points_current: 999, // TODO: Revise this, possibly needs to be nullable
   death_save_successes: -1, // Default, progresses from 0 to 3
   death_save_failures: -1, // Default, progresses from 0 to 3

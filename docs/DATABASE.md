@@ -83,8 +83,8 @@ The following fields are present in most tables for consistency and audit purpos
 | `id`                 | `uuid`      | Unique identifier.                               |
 | `encounter_id`       | `uuid`      | Foreign key referencing `encounters.id`.         |
 | `participant_id`     | `uuid`      | Foreign key referencing `participants.id`.       |
-| `turn_no`            | `smallint`  | Turn number.                                     |
-| `hit_points_current` | `smallint`  | Current HP of the participant.                  |
+| `round_no`           | `smallint`  | Round number.                                    |
+| `hit_points_current` | `smallint`  | Current HP of the participant.                   |
 | `death_save_successes`| `smallint` | Number of successful death saving throws.        |
 | `death_save_failures`| `smallint`  | Number of failed death saving throws.            |
 | `is_public`          | `boolean`   | Visibility to others.                            |
