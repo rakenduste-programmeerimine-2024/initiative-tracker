@@ -1,7 +1,7 @@
 import { createEntityService } from "@/lib/services/entity-service"
 import { getSupabaseClient } from "@/utils/supabase/client-provider"
 import { TableName } from "@/types/enums/table-name"
-import { Encounter, EncounterDTO } from "@/lib/models/encounter"
+import { Encounter, EncounterDTO, EncounterUtils } from "@/lib/models/encounter"
 import {
   calculateActiveArmorClass,
   calculateInitiative,
@@ -9,12 +9,15 @@ import {
 } from "@/utils/entities/participant-utils"
 
 const EncounterService = {
-  ...createEntityService<Encounter>(TableName.Encounters),
+  ...createEntityService<Encounter, EncounterDTO>(
+    TableName.Encounters,
+    EncounterUtils.mapToDTO,
+  ),
 
   async getEncounterCascaded(
     encounterId: string,
     currentUserId: string,
-  ): Promise<{ success: true; data: any }> {
+  ): Promise<{ success: true; data: Partial<EncounterDTO> }> {
     const supabase = await getSupabaseClient()
 
     const query = supabase
@@ -66,7 +69,9 @@ const EncounterService = {
       throw new Error(`Error fetching encounter: ${error.message}`)
     }
 
-    return { success: true, data }
+    const cascadedDTO: Partial<EncounterDTO> = mapToCascadedEncounterDTO(data)
+
+    return { success: true, data: cascadedDTO }
   },
 }
 

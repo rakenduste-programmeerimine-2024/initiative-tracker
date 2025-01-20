@@ -1,7 +1,11 @@
 import { createEntityService } from "@/lib/services/entity-service"
 import { getSupabaseClient } from "@/utils/supabase/client-provider"
 import { TableName } from "@/types/enums/table-name"
-import { CombatLog, CombatLogDTO } from "@/lib/models/combat-log"
+import {
+  CombatLog,
+  CombatLogDTO,
+  CombatLogUtils,
+} from "@/lib/models/combat-log"
 import { calculateHealthPercentage } from "@/utils/entities/combat-log-utils"
 import {
   calculateActiveArmorClass,
@@ -10,15 +14,18 @@ import {
 } from "@/utils/entities/participant-utils"
 
 const CombatLogService = {
-  ...createEntityService<CombatLog>(TableName.CombatLogs),
+  ...createEntityService<CombatLog, CombatLogDTO>(
+    TableName.CombatLogs,
+    CombatLogUtils.mapToDTO,
+  ),
 
   async getCombatLogSnapshot(
     encounterId: string,
     currentUserId: string,
-  ): Promise<{ success: true; data: any }> {
+  ): Promise<{ success: true; data: Partial<CombatLogDTO>[] }> {
     const supabase = await getSupabaseClient()
 
-    const query = supabase.rpc("get_last_combat_logs_with_participants", {
+    const query = supabase.rpc("get_last_combat_logs", {
       encounter_id: encounterId,
       user_id: currentUserId,
     })
@@ -31,15 +38,9 @@ const CombatLogService = {
       )
     }
 
-    const dataWithHealthPercentage = data.map((item: any) => ({
-      ...item,
-      health_percentage: calculateHealthPercentage(
-        item.hit_points_current,
-        item.hit_points_max,
-      ),
-    }))
+    const cascadedDTO: Partial<CombatLogDTO>[] = mapToCombatLogSnapshotDTO(data)
 
-    return { success: true, data: dataWithHealthPercentage }
+    return { success: true, data: cascadedDTO }
   },
 }
 

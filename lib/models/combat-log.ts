@@ -67,12 +67,15 @@ export const CombatLogUtils = {
   },
 
   mapToDTO(combatLog: CombatLog): CombatLogDTO {
+    const baseDTO = EntityUtils.mapToDTO(combatLog)
+
     const healthPercentage = calculateHealthPercentage(
       combatLog.hit_points_current,
       combatLog.hit_points_current > 0 ? combatLog.hit_points_current : null,
     )
 
     return {
+      ...baseDTO,
       ...combatLog,
       health_percentage: healthPercentage,
     }

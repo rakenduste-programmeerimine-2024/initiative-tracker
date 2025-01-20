@@ -7,7 +7,10 @@ import {
 } from "@/utils/entities/entity-utils"
 import { getValidationFunction } from "@/utils/entities/validation-registry"
 
-export function createEntityService<T extends Entity>(tableName: TableName) {
+export function createEntityService<T extends Entity, D extends T = T>(
+  tableName: TableName,
+  mapToDTO?: (entity: T) => D,
+) {
   return {
     // Fetch a single record by id
     async get(
@@ -32,7 +35,10 @@ export function createEntityService<T extends Entity>(tableName: TableName) {
         )
       }
 
-      return { success: true, data: convertTimestamps(data) }
+      const convertedData = convertTimestamps(data)
+      const dto = mapToDTO ? mapToDTO(convertedData) : (convertedData as D)
+
+      return { success: true, data: dto }
     },
 
     // Fetch multiple records by foreign key
@@ -58,7 +64,12 @@ export function createEntityService<T extends Entity>(tableName: TableName) {
         )
       }
 
-      return { success: true, data: data.map(convertTimestamps) }
+      const convertedData = data.map(convertTimestamps)
+      const dtos = mapToDTO
+        ? convertedData.map(item => mapToDTO(item))
+        : (convertedData as D[])
+
+      return { success: true, data: dtos }
     },
 
     // Fetch multiple records by owner
@@ -85,7 +96,12 @@ export function createEntityService<T extends Entity>(tableName: TableName) {
         )
       }
 
-      return { success: true, data: data.map(convertTimestamps) }
+      const convertedData = data.map(convertTimestamps)
+      const dtos = mapToDTO
+        ? convertedData.map(item => mapToDTO(item))
+        : (convertedData as D[])
+
+      return { success: true, data: dtos }
     },
 
     // Fetch a single record's owner id by record's id
@@ -141,7 +157,10 @@ export function createEntityService<T extends Entity>(tableName: TableName) {
         throw new Error(`Error creating ${tableName} record: ${error.message}`)
       }
 
-      return { success: true, data: convertTimestamps(data) }
+      const convertedData = convertTimestamps(data)
+      const dto = mapToDTO ? mapToDTO(convertedData) : (convertedData as D)
+
+      return { success: true, data: dto }
     },
 
     // Update a single record
@@ -178,7 +197,10 @@ export function createEntityService<T extends Entity>(tableName: TableName) {
         )
       }
 
-      return { success: true, data: convertTimestamps(data) }
+      const convertedData = convertTimestamps(data)
+      const dto = mapToDTO ? mapToDTO(convertedData) : (convertedData as D)
+
+      return { success: true, data: dto }
     },
 
     // Soft-delete a single record
@@ -187,7 +209,7 @@ export function createEntityService<T extends Entity>(tableName: TableName) {
       currentUserId: string,
     ): Promise<{ success: true; id: string }> {
       const supabase = await getSupabaseClient()
-      
+
       const query = supabase
         .from(tableName)
         .update({ deleted_at: new Date().toISOString() })

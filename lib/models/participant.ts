@@ -78,28 +78,16 @@ export const ParticipantUtils = {
     }
   },
 
-  mapToDTO(
-    participant: Participant,
-    statBlock: {
-      dexterity_score: number
-      base_armor_class: number
-      dex_applies_to_ac: boolean
-    },
-  ): ParticipantDTO {
-    const dexterityModifier = calculateModifier(statBlock.dexterity_score)
+  mapToDTO(participant: Participant): ParticipantDTO {
+    const baseDTO = EntityUtils.mapToDTO(participant)
 
     return {
+      ...baseDTO,
       ...participant,
-      dexterity_modifier: dexterityModifier,
-      final_initiative: calculateInitiative(
-        participant.rolled_initiative,
-        dexterityModifier,
-      ),
-      active_armor_class: calculateActiveArmorClass(
-        statBlock.base_armor_class,
-        dexterityModifier,
-        statBlock.dex_applies_to_ac,
-      ),
+      stat_block: null,
+      dexterity_modifier: 0,
+      final_initiative: participant.rolled_initiative || 0,
+      active_armor_class: 10,
     }
   },
 }

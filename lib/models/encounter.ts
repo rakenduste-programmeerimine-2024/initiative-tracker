@@ -32,7 +32,10 @@ export const EncounterUtils = {
   },
 
   mapToDTO(encounter: Encounter): EncounterDTO {
+    const baseDTO = EntityUtils.mapToDTO(encounter)
+
     return {
+      ...baseDTO,
       ...encounter,
     }
   },

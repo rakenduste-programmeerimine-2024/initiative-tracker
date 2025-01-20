@@ -79,9 +79,12 @@ export const StatBlockUtils = {
   },
 
   mapToDTO(statBlock: StatBlock): StatBlockDTO {
+    const baseDTO = EntityUtils.mapToDTO(statBlock)
+
     const dexterityModifier = calculateModifier(statBlock.dexterity_score)
 
     return {
+      ...baseDTO,
       ...statBlock,
       dexterity_modifier: dexterityModifier,
     }

@@ -1,7 +1,11 @@
 import { createEntityService } from "@/lib/services/entity-service"
 import { getSupabaseClient } from "@/utils/supabase/client-provider"
 import { TableName } from "@/types/enums/table-name"
-import { Participant, ParticipantDTO } from "@/lib/models/participant"
+import {
+  Participant,
+  ParticipantDTO,
+  ParticipantUtils,
+} from "@/lib/models/participant"
 import {
   calculateActiveArmorClass,
   calculateInitiative,
@@ -9,12 +13,14 @@ import {
 } from "@/utils/entities/participant-utils"
 
 const ParticipantService = {
-  ...createEntityService<Participant>(TableName.Participants),
-
+  ...createEntityService<Participant, ParticipantDTO>(
+    TableName.Participants,
+    ParticipantUtils.mapToDTO,
+  ),
   async getParticipantCascaded(
     participantId: string,
     currentUserId: string,
-  ): Promise<{ success: true; data: any }> {
+  ): Promise<{ success: true; data: Partial<ParticipantDTO> }> {
     const supabase = await getSupabaseClient()
 
     const query = supabase
@@ -51,7 +57,10 @@ const ParticipantService = {
       throw new Error(`Error fetching participant data: ${error.message}`)
     }
 
-    return { success: true, data: data }
+    const cascadedDTO: Partial<ParticipantDTO> =
+      mapToCascadedParticipantDTO(data)
+
+    return { success: true, data: cascadedDTO }
   },
 }
 
