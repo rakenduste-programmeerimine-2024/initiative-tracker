@@ -1,13 +1,68 @@
 "use client"
-import { useState } from "react"
+
+import { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
+import { fetchResource } from "@/utils/api/api-client"
+import { EncounterDTO } from "@/lib/models/encounter"
+import { CombatLogDTO } from "@/lib/models/combat-log"
 import DiceRoller from "./dice-roller"
 
+type ParticipantState = {
+  initiative: string | number
+  name: string
+  hp: string | number
+  ac: string | number
+  group: string | number
+  selected: boolean
+}
+
 export default function Tracker() {
-  const [participants, setParticipants] = useState([
-    { initiative: "", name: "", hp: "", ac: "", group: "", selected: false },
-  ])
+  const searchParams = useSearchParams()
+  const encounterId = searchParams.get("encounterId")
+
+  const [participants, setParticipants] = useState<ParticipantState[]>([])
   const [round, setRound] = useState(1)
   const [activeIndex, setActiveIndex] = useState(0)
+
+  useEffect(() => {
+    const loadEncounterData = async () => {
+      if (!encounterId) return
+
+      try {
+        // Fetch cascaded encounter data
+        const encounter = await fetchResource<EncounterDTO>(
+          `/api/encounters/${encounterId}?cascade=true`,
+        )
+
+        console.log("encounter:", encounter)
+
+        // Fetch combat log snapshot
+        const combatLogSnapshot = await fetchResource<CombatLogDTO[]>(
+          `/api/combat-logs/by-encounter/${encounterId}?cascade=true`,
+        )
+
+        console.log("snapshot:", combatLogSnapshot)
+
+        // Merge combat log and participant data
+        const participants = combatLogSnapshot.map((log: any) => ({
+          initiative: log.participant?.final_initiative ?? "",
+          name: log.participant?.name ?? "",
+          hp: log.health_percentage ?? "",
+          ac: log.participant?.active_armor_class ?? "",
+          group: log.participant?.group_no ?? "",
+          selected: false,
+        }))
+
+        console.log("participants:", JSON.stringify(participants))
+
+        setParticipants(participants)
+      } catch (error) {
+        console.error("Error loading encounter data:", error)
+      }
+    }
+
+    loadEncounterData()
+  }, [encounterId])
 
   const handleBatchRoll = (rolls: number[]) => {
     setParticipants(prev =>
@@ -161,7 +216,7 @@ export default function Tracker() {
                       )
                     }
                     className={`text-[#1c1c1e] rounded p-1 w-full ${getHpColor(
-                      participant.hp,
+                      String(participant.hp),
                     )}`}
                   />
                 </td>
