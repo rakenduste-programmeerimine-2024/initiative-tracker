@@ -49,7 +49,7 @@ export default function Participants() {
 
       const dataToSave = participants.map(participant => ({
         name: participant.name || "Unnamed",
-        rolled_initiative: participant.dexModifier, //tracker lehel oleks vaja teha, nii et rolli väärtus liidetakse sellele otsa
+        rolled_initiative: participant.dexterity, //tracker lehel oleks vaja teha, nii et rolli väärtus liidetakse sellele otsa, olex vaja luua dexModifier andmebaasi
         hit_points_max: participant.hp || 0,
         status: "Alive",
         is_public: false,
