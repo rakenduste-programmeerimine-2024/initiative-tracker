@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS "public"."combat_logs" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "encounter_id" "uuid",
     "participant_id" "uuid",
-    "turn_no" smallint DEFAULT '1'::smallint NOT NULL,
+    "round_no" smallint DEFAULT '1'::smallint NOT NULL,
     "hit_points_current" smallint NOT NULL,
     "death_save_successes" smallint DEFAULT '-1'::smallint NOT NULL,
     "death_save_failures" smallint DEFAULT '-1'::smallint NOT NULL,

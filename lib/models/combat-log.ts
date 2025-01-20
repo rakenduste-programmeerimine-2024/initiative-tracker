@@ -6,7 +6,7 @@ type UUID = string
 export type CombatLog = Entity & {
   encounter_id: UUID | null
   participant_id: UUID | null
-  turn_no: number
+  round_no: number
   hit_points_current: number
   death_save_successes: number // Ranges from -1 (default) to 3
   death_save_failures: number // Ranges from -1 (default) to 3
@@ -18,9 +18,9 @@ export const CombatLogUtils = {
   validate(data: Partial<CombatLog>): void {
     EntityUtils.validate(data)
 
-    if (data.turn_no !== undefined && data.turn_no < 1) {
+    if (data.round_no !== undefined && data.round_no < 1) {
       throw new Error(
-        `Invalid turn number (${data.turn_no}). Turn number must be 1 or higher.`,
+        `Invalid round number (${data.round_no}). Round number must be 1 or higher.`,
       )
     }
 
