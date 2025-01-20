@@ -21,7 +21,6 @@ export const GET = createRouteHandler(
           userId,
         )
 
-        console.log(JSON.stringify(cascadedLogs.data))
         return NextResponse.json({
           success: true,
           data: JSON.stringify(cascadedLogs.data),
