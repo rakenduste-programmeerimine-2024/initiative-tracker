@@ -15,7 +15,13 @@ export default function Index() {
             href="/tracker"
             className="px-6 py-3 bg-[#6a040f] text-white font-semibold rounded-sm shadow-md hover:bg-[#8a0511] transition"
           >
-            Start Tracking
+            Tracker
+          </Link>
+          <Link
+            href="/participants"
+            className="px-6 py-3 bg-[#6a040f] text-white font-semibold rounded-sm shadow-md hover:bg-[#8a0511] transition"
+          >
+            Participants
           </Link>
         </div>
       </div>
