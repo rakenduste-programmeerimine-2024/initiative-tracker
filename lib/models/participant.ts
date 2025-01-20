@@ -1,5 +1,6 @@
 import { DEFAULT_PARTICIPANT } from "@/lib/constants/default-values"
 import { Entity, EntityUtils } from "./entity"
+import { StatBlockDTO } from "./stat-block"
 import {
   ParticipantStatus,
   ParticipantType,
@@ -27,6 +28,7 @@ export type ParticipantDTO = Participant & {
   dexterity_modifier: number
   final_initiative: number
   active_armor_class: number
+  stat_block?: Partial<StatBlockDTO> | null
 }
 
 export const ParticipantUtils = {

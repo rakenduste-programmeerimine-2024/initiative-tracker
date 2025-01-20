@@ -1,6 +1,7 @@
 import { DEFAULT_COMBAT_LOG } from "@/lib/constants/default-values"
 import { Entity, EntityUtils } from "./entity"
 import { calculateHealthPercentage } from "@/utils/entities/combat-log-utils"
+import { ParticipantDTO } from "./participant"
 
 type UUID = string
 
@@ -15,6 +16,7 @@ export type CombatLog = Entity & {
 
 export type CombatLogDTO = CombatLog & {
   health_percentage: number | null
+  participant?: Partial<ParticipantDTO> | null
 }
 
 export const CombatLogUtils = {
