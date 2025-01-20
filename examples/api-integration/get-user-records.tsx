@@ -3,22 +3,22 @@
 import { useEffect, useState } from "react"
 import { User } from "@supabase/supabase-js"
 import { fetchMultipleResources } from "@/utils/api/api-client"
-import { Encounter } from "@/lib/models/encounter"
-import { Participant } from "@/lib/models/participant"
-import { StatBlock } from "@/lib/models/stat-block"
-import { CombatLog } from "@/lib/models/combat-log"
+import { CombatLogDTO } from "@/lib/models/combat-log"
+import { EncounterDTO } from "@/lib/models/encounter"
+import { ParticipantDTO } from "@/lib/models/participant"
+import { StatBlockDTO } from "@/lib/models/stat-block"
 
 export default function GetUserRecords({ user }: { user: User | null }) {
   const [data, setData] = useState<{
-    encounters: Encounter[]
-    participants: Participant[]
-    statBlocks: StatBlock[]
-    combatLogs: CombatLog[]
+    combatLogs: CombatLogDTO[]
+    encounters: EncounterDTO[]
+    participants: ParticipantDTO[]
+    statBlocks: StatBlockDTO[]
   }>({
+    combatLogs: [],
     encounters: [],
     participants: [],
     statBlocks: [],
-    combatLogs: [],
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -35,23 +35,23 @@ export default function GetUserRecords({ user }: { user: User | null }) {
         const baseApiUrl = "/api"
 
         const [
+          combatLogsResponse,
           encountersResponse,
           participantsResponse,
           statBlocksResponse,
-          combatLogsResponse,
         ] = await Promise.all([
-          fetchMultipleResources<Encounter>(`${baseApiUrl}/encounters`),
-          fetchMultipleResources<Participant>(`${baseApiUrl}/participants`),
-          fetchMultipleResources<StatBlock>(`${baseApiUrl}/stat-blocks`),
-          fetchMultipleResources<CombatLog>(`${baseApiUrl}/combat-logs`),
+          fetchMultipleResources<CombatLogDTO>(`${baseApiUrl}/combat-logs`),
+          fetchMultipleResources<EncounterDTO>(`${baseApiUrl}/encounters`),
+          fetchMultipleResources<ParticipantDTO>(`${baseApiUrl}/participants`),
+          fetchMultipleResources<StatBlockDTO>(`${baseApiUrl}/stat-blocks`),
         ])
 
         if (!isCancelled) {
           setData({
+            combatLogs: combatLogsResponse?.data,
             encounters: encountersResponse?.data,
             participants: participantsResponse?.data,
             statBlocks: statBlocksResponse?.data,
-            combatLogs: combatLogsResponse?.data,
           })
         }
       } catch (err: any) {

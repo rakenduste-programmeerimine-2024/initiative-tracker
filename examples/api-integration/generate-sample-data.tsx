@@ -7,15 +7,17 @@ import {
   deleteResource,
   fetchMultipleResources,
 } from "@/utils/api/api-client"
-import { CombatLog, CombatLogUtils } from "@/lib/models/combat-log"
-import { Encounter, EncounterUtils } from "@/lib/models/encounter"
-import { Participant, ParticipantUtils } from "@/lib/models/participant"
-import { StatBlock, StatBlockUtils } from "@/lib/models/stat-block"
+import { CombatLogDTO, CombatLogUtils } from "@/lib/models/combat-log"
+import { EncounterDTO, EncounterUtils } from "@/lib/models/encounter"
+import { ParticipantDTO, ParticipantUtils } from "@/lib/models/participant"
+import { StatBlockDTO, StatBlockUtils } from "@/lib/models/stat-block"
 import { ParticipantStatus } from "@/types/enums/participant-enums"
 
 export default function GenerateSampleData({ user }: { user: User | null }) {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
+
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
   async function createRandomStatBlock(): Promise<string> {
     const randomStatBlock = StatBlockUtils.create({
@@ -34,7 +36,7 @@ export default function GenerateSampleData({ user }: { user: User | null }) {
     const statBlock = (await createResource(
       "/api/stat-blocks",
       randomStatBlock,
-    )) as StatBlock
+    )) as StatBlockDTO
     return statBlock.id
   }
 
@@ -47,7 +49,7 @@ export default function GenerateSampleData({ user }: { user: User | null }) {
     const encounter = (await createResource(
       "/api/encounters",
       randomEncounter,
-    )) as Encounter
+    )) as EncounterDTO
     return encounter.id
   }
 
@@ -69,7 +71,7 @@ export default function GenerateSampleData({ user }: { user: User | null }) {
     const participant = (await createResource(
       "/api/participants",
       randomParticipant,
-    )) as Participant
+    )) as ParticipantDTO
     return participant.id
   }
 
@@ -91,7 +93,7 @@ export default function GenerateSampleData({ user }: { user: User | null }) {
     const combatLog = (await createResource(
       "/api/combat-logs",
       randomCombatLog,
-    )) as CombatLog
+    )) as CombatLogDTO
     return combatLog.id
   }
 
@@ -150,43 +152,47 @@ export default function GenerateSampleData({ user }: { user: User | null }) {
     try {
       // Fetch and delete all combat logs
       const combatLogs =
-        await fetchMultipleResources<CombatLog>("/api/combat-logs")
+        await fetchMultipleResources<CombatLogDTO>("/api/combat-logs")
 
       if (combatLogs?.data?.length > 0) {
         for (const combatLog of combatLogs.data) {
           await deleteResource(`/api/combat-logs/${combatLog.id}/hard-delete`)
+          await delay(100)
         }
       }
 
       // Fetch and delete all participants
       const participants =
-        await fetchMultipleResources<Participant>("/api/participants")
+        await fetchMultipleResources<ParticipantDTO>("/api/participants")
 
       if (participants?.data?.length > 0) {
         for (const participant of participants.data) {
           await deleteResource(
             `/api/participants/${participant.id}/hard-delete`,
           )
+          await delay(100)
         }
       }
 
       // Fetch and delete all encounters
       const encounters =
-        await fetchMultipleResources<Encounter>("/api/encounters")
+        await fetchMultipleResources<EncounterDTO>("/api/encounters")
 
       if (encounters?.data?.length > 0) {
         for (const encounter of encounters.data) {
           await deleteResource(`/api/encounters/${encounter.id}/hard-delete`)
+          await delay(100)
         }
       }
 
       // Fetch and delete all stat blocks
       const statBlocks =
-        await fetchMultipleResources<StatBlock>("/api/stat-blocks")
+        await fetchMultipleResources<StatBlockDTO>("/api/stat-blocks")
 
       if (statBlocks?.data?.length > 0) {
         for (const statBlock of statBlocks.data) {
           await deleteResource(`/api/stat-blocks/${statBlock.id}/hard-delete`)
+          await delay(100)
         }
       }
 
