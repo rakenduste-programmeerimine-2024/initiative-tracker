@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
 import { fetchResource } from "@/utils/api/api-client"
 import { EncounterDTO } from "@/lib/models/encounter"
 import { CombatLogDTO } from "@/lib/models/combat-log"
