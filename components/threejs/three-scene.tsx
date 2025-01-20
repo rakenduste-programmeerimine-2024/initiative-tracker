@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
@@ -13,6 +13,10 @@ const ThreeScene: React.FC = () => {
       const renderer = new THREE.WebGLRenderer({ alpha: true });
 
       renderer.setSize(200, 200);
+
+      if (containerRef.current?.children.length) {
+        containerRef.current.removeChild(containerRef.current.children[0]);
+      }
       containerRef.current?.appendChild(renderer.domElement);
 
       const loader = new THREE.TextureLoader();
@@ -53,7 +57,12 @@ const ThreeScene: React.FC = () => {
       renderScene();
 
       return () => {
+
         window.removeEventListener('resize', handleResize);
+        if (containerRef.current?.children.length) {
+          containerRef.current.removeChild(containerRef.current.children[0]);
+        }
+        renderer.dispose();
       };
     }
   }, []);
