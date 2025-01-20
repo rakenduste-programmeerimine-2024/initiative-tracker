@@ -3,14 +3,8 @@
 import { useCallback, useEffect, useState } from "react"
 import { User } from "@supabase/supabase-js"
 import { fetchResource, updateResource } from "@/utils/api/api-client"
+import { ProfileDTO } from "@/lib/models/profile"
 import Avatar from "@/app/profile/avatar"
-
-type Profile = {
-  id: string
-  full_name: string | null
-  username: string | null
-  avatar_url: string | null
-}
 
 export default function ProfileExample({ user }: { user: User | null }) {
   const [loading, setLoading] = useState(true)
@@ -23,7 +17,9 @@ export default function ProfileExample({ user }: { user: User | null }) {
     try {
       setLoading(true)
 
-      const profile = await fetchResource<Profile>(`/api/profiles/${user?.id}`)
+      const profile = await fetchResource<ProfileDTO>(
+        `/api/profiles/${user?.id}`,
+      )
 
       setFullname(profile.full_name)
       setUsername(profile.username)
@@ -50,7 +46,7 @@ export default function ProfileExample({ user }: { user: User | null }) {
         avatar_url: avatarUrl,
       }
 
-      await updateResource<Profile, typeof updatedProfile>(
+      await updateResource<ProfileDTO, typeof updatedProfile>(
         `/api/profiles/${user?.id}`,
         updatedProfile,
       )
